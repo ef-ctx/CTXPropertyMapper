@@ -30,7 +30,7 @@ Assuming the follow model:
 @interface User : NSObject
 @property (nonatomic, strong) NSString *firstName;
 @property (nonatomic, strong) NSString *lastName;
-@property (nonatomic, strong) NSInteger age;
+@property (nonatomic, assign) NSInteger age;
 @property (nonatomic, assign) BOOL active;
 @property (nonatomic, strong) Job *job;
 @property (nonatomic, strong) NSURL *profileURL;
@@ -63,10 +63,10 @@ follow the parsing code:
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
 
 [mapper addMappings:@{@"firstName":CTXProperty(firstName),
-						  @"lastName":CTXProperty(lastName),
-						  @"status.alive":CTXProperty(active)
-						  }
-			   forClass:[User class]];
+					  @"lastName":CTXProperty(lastName),
+					  @"status.alive":CTXProperty(active)
+					  }
+		   forClass:[User class]];
   
 //Decoding
 NSArray *errors = nil;
@@ -107,18 +107,18 @@ CTXValueGenerationBlock *encodeOrigin = ^id(id object){
 };
 
 [mapper addMappings:@{@"title":CTXProperty(title),
-						  @"sector":CTXProperty(sector),
-						  @"hours"::CTXProperty(hours),
-						  }
-			   forClass:[Job class]];
+					  @"sector":CTXProperty(sector),
+					  @"hours"::CTXProperty(hours),
+					  }
+		   forClass:[Job class]];
 
 [mapper addMappings:@{@"firstName":CTXProperty(firstName),
-						  @"lastName":CTXProperty(lastName),
-						  @"job":CTXClass(job, [Job class]),
-						  @"avatarURL":CTXBlock(profileURL, encodeURL, decodeURL),
-						  @"origin":CTXGenerationConsumerBlock(encodeOrigin, decodeOrigin)
-						  }
-			   forClass:[User class]];
+					  @"lastName":CTXProperty(lastName),
+					  @"job":CTXClass(job, [Job class]),
+					  @"avatarURL":CTXBlock(profileURL, encodeURL, decodeURL),
+					  @"origin":CTXGenerationConsumerBlock(encodeOrigin, decodeOrigin)
+					  }
+		   forClass:[User class]];
 			  
 User *user = [mapper createObjectWithClass:[User class] fromDictionary:dictionary];
 ````
@@ -147,16 +147,52 @@ Now just create your instance of CTXPropertyMapper initializing with your custom
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] initWithModelFactory:[[CoreDataModelFactory alloc] init]];
 ````
 
+## Automatic Mappings
+
+Usually the client model has the same structure of the server. To avoid repetitive code, CTXPropertyMapper supports creating models automatically.
+
+````objc
+CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init]];
+
+[mapper addMappings:[CTXPropertyMapper generateMappingsFromClass:[Job class]]
+		   forClass:[Job class]];
+````
+We use some objective c runtime calls to create a valid mapper, ignoring pointer address, blocks, selectors, etc.
+Follow the currentyl supported properties:
+- NSString
+- NSNumber
+- char
+- double
+- enum
+- float
+- int
+- long
+- short
+- signed
+- unsigned
+
+### Limitations
+
+Currently mappings generation doesn't consider inherited properties, created by protocols or dynamically create by the runtime. So use wisely in simple models.
+
+## Helpers
+
+If your local model shares the property names with the remote model, but you don't want to map the hole object like automatic mapping does, you can use the method `+ (NSDictionary *)generateMappingsWithKeys:(NSArray *)keys`, passing the array of properties that you want to map.
+
+````objc
+CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init]];
+
+[mapper addMappings:[CTXPropertyMapper generateMappingsWithKeys:@[@"title", @"sector"]]
+		   forClass:[Job class]];
+````
+
 ## Validations
 
 You can add validations to your mappings.
 
 ````objc
-[mapper addMappings:@{@"title":CTXProperty(title).isRequired().min(10),
-						  @"sector":CTXProperty(sector).lengthRange(5, 20),
-						  @"hours"::CTXProperty(hours),
-						  }
-			   forClass:[Job class]];
+[mapper addMappings:[CTXPropertyMapper generateMappingsFromClass:[Job class]]
+		   forClass:[Job class]];
 ````
 If necessaire you can create your own validations, get inspired by looking at the category `CTXPropertyDescriptor+Validators(h,m)`.
 
