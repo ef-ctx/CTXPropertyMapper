@@ -196,7 +196,7 @@ You can add validations to your mappings.
 ````
 If necessaire you can create your own validations, get inspired by looking at the category `CTXPropertyDescriptor+Validators(h,m)`.
 
-### Buil-in validations
+### Built-in validations
 
 Code borrowed from our inspiration project [KZPropertyMapper](https://github.com/krzysztofzablocki/KZPropertyMapper)
 
