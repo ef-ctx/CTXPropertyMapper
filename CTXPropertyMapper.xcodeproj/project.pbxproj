@@ -1,0 +1,443 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AC8E91B11A828D5F0065C8A9 /* CTXPropertyMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC8E91B01A828D5F0065C8A9 /* CTXPropertyMapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AC8E91B71A828D5F0065C8A9 /* CTXPropertyMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC8E91AB1A828D5F0065C8A9 /* CTXPropertyMapper.framework */; };
+		AC8E91BE1A828D5F0065C8A9 /* CTXPropertyMapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8E91BD1A828D5F0065C8A9 /* CTXPropertyMapperTests.m */; };
+		AC8E91CF1A828DD70065C8A9 /* CTXPropertyDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = AC8E91C71A828DD70065C8A9 /* CTXPropertyDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AC8E91D01A828DD70065C8A9 /* CTXPropertyDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8E91C81A828DD70065C8A9 /* CTXPropertyDescriptor.m */; };
+		AC8E91D11A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.h in Headers */ = {isa = PBXBuildFile; fileRef = AC8E91C91A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AC8E91D21A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8E91CA1A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.m */; };
+		AC8E91D31A828DD70065C8A9 /* CTXPropertyMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8E91CB1A828DD70065C8A9 /* CTXPropertyMapper.m */; };
+		AC8E91D41A828DD70065C8A9 /* CTXPropertyMapperErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = AC8E91CC1A828DD70065C8A9 /* CTXPropertyMapperErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AC8E91D51A828DD70065C8A9 /* CTXPropertyMapperErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8E91CD1A828DD70065C8A9 /* CTXPropertyMapperErrors.m */; };
+		AC8E91D61A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = AC8E91CE1A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AC8E91B81A828D5F0065C8A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC8E91A21A828D5F0065C8A9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC8E91AA1A828D5F0065C8A9;
+			remoteInfo = CTXPropertyMapper;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AC8E91AB1A828D5F0065C8A9 /* CTXPropertyMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CTXPropertyMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC8E91AF1A828D5F0065C8A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC8E91B01A828D5F0065C8A9 /* CTXPropertyMapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTXPropertyMapper.h; sourceTree = "<group>"; };
+		AC8E91B61A828D5F0065C8A9 /* CTXPropertyMapperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CTXPropertyMapperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC8E91BC1A828D5F0065C8A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC8E91BD1A828D5F0065C8A9 /* CTXPropertyMapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CTXPropertyMapperTests.m; sourceTree = "<group>"; };
+		AC8E91C71A828DD70065C8A9 /* CTXPropertyDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTXPropertyDescriptor.h; sourceTree = "<group>"; };
+		AC8E91C81A828DD70065C8A9 /* CTXPropertyDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTXPropertyDescriptor.m; sourceTree = "<group>"; };
+		AC8E91C91A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CTXPropertyDescriptor+Validators.h"; sourceTree = "<group>"; };
+		AC8E91CA1A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CTXPropertyDescriptor+Validators.m"; sourceTree = "<group>"; };
+		AC8E91CB1A828DD70065C8A9 /* CTXPropertyMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTXPropertyMapper.m; sourceTree = "<group>"; };
+		AC8E91CC1A828DD70065C8A9 /* CTXPropertyMapperErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTXPropertyMapperErrors.h; sourceTree = "<group>"; };
+		AC8E91CD1A828DD70065C8A9 /* CTXPropertyMapperErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTXPropertyMapperErrors.m; sourceTree = "<group>"; };
+		AC8E91CE1A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTXPropertyMapperModelFactoryProtocol.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC8E91A71A828D5F0065C8A9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC8E91B31A828D5F0065C8A9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC8E91B71A828D5F0065C8A9 /* CTXPropertyMapper.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AC8E91A11A828D5F0065C8A9 = {
+			isa = PBXGroup;
+			children = (
+				AC8E91AD1A828D5F0065C8A9 /* CTXPropertyMapper */,
+				AC8E91BA1A828D5F0065C8A9 /* CTXPropertyMapperTests */,
+				AC8E91AC1A828D5F0065C8A9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC8E91AC1A828D5F0065C8A9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC8E91AB1A828D5F0065C8A9 /* CTXPropertyMapper.framework */,
+				AC8E91B61A828D5F0065C8A9 /* CTXPropertyMapperTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AC8E91AD1A828D5F0065C8A9 /* CTXPropertyMapper */ = {
+			isa = PBXGroup;
+			children = (
+				AC8E91B01A828D5F0065C8A9 /* CTXPropertyMapper.h */,
+				AC8E91C71A828DD70065C8A9 /* CTXPropertyDescriptor.h */,
+				AC8E91C81A828DD70065C8A9 /* CTXPropertyDescriptor.m */,
+				AC8E91C91A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.h */,
+				AC8E91CA1A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.m */,
+				AC8E91CB1A828DD70065C8A9 /* CTXPropertyMapper.m */,
+				AC8E91CC1A828DD70065C8A9 /* CTXPropertyMapperErrors.h */,
+				AC8E91CD1A828DD70065C8A9 /* CTXPropertyMapperErrors.m */,
+				AC8E91CE1A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h */,
+				AC8E91AE1A828D5F0065C8A9 /* Supporting Files */,
+			);
+			path = CTXPropertyMapper;
+			sourceTree = "<group>";
+		};
+		AC8E91AE1A828D5F0065C8A9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC8E91AF1A828D5F0065C8A9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		AC8E91BA1A828D5F0065C8A9 /* CTXPropertyMapperTests */ = {
+			isa = PBXGroup;
+			children = (
+				AC8E91BD1A828D5F0065C8A9 /* CTXPropertyMapperTests.m */,
+				AC8E91BB1A828D5F0065C8A9 /* Supporting Files */,
+			);
+			path = CTXPropertyMapperTests;
+			sourceTree = "<group>";
+		};
+		AC8E91BB1A828D5F0065C8A9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				AC8E91BC1A828D5F0065C8A9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		AC8E91A81A828D5F0065C8A9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC8E91B11A828D5F0065C8A9 /* CTXPropertyMapper.h in Headers */,
+				AC8E91CF1A828DD70065C8A9 /* CTXPropertyDescriptor.h in Headers */,
+				AC8E91D41A828DD70065C8A9 /* CTXPropertyMapperErrors.h in Headers */,
+				AC8E91D61A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h in Headers */,
+				AC8E91D11A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		AC8E91AA1A828D5F0065C8A9 /* CTXPropertyMapper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC8E91C11A828D5F0065C8A9 /* Build configuration list for PBXNativeTarget "CTXPropertyMapper" */;
+			buildPhases = (
+				AC8E91A61A828D5F0065C8A9 /* Sources */,
+				AC8E91A71A828D5F0065C8A9 /* Frameworks */,
+				AC8E91A81A828D5F0065C8A9 /* Headers */,
+				AC8E91A91A828D5F0065C8A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CTXPropertyMapper;
+			productName = CTXPropertyMapper;
+			productReference = AC8E91AB1A828D5F0065C8A9 /* CTXPropertyMapper.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		AC8E91B51A828D5F0065C8A9 /* CTXPropertyMapperTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC8E91C41A828D5F0065C8A9 /* Build configuration list for PBXNativeTarget "CTXPropertyMapperTests" */;
+			buildPhases = (
+				AC8E91B21A828D5F0065C8A9 /* Sources */,
+				AC8E91B31A828D5F0065C8A9 /* Frameworks */,
+				AC8E91B41A828D5F0065C8A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC8E91B91A828D5F0065C8A9 /* PBXTargetDependency */,
+			);
+			name = CTXPropertyMapperTests;
+			productName = CTXPropertyMapperTests;
+			productReference = AC8E91B61A828D5F0065C8A9 /* CTXPropertyMapperTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AC8E91A21A828D5F0065C8A9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = EF;
+				TargetAttributes = {
+					AC8E91AA1A828D5F0065C8A9 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					AC8E91B51A828D5F0065C8A9 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = AC8E91A51A828D5F0065C8A9 /* Build configuration list for PBXProject "CTXPropertyMapper" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = AC8E91A11A828D5F0065C8A9;
+			productRefGroup = AC8E91AC1A828D5F0065C8A9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AC8E91AA1A828D5F0065C8A9 /* CTXPropertyMapper */,
+				AC8E91B51A828D5F0065C8A9 /* CTXPropertyMapperTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AC8E91A91A828D5F0065C8A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC8E91B41A828D5F0065C8A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AC8E91A61A828D5F0065C8A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC8E91D31A828DD70065C8A9 /* CTXPropertyMapper.m in Sources */,
+				AC8E91D21A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.m in Sources */,
+				AC8E91D51A828DD70065C8A9 /* CTXPropertyMapperErrors.m in Sources */,
+				AC8E91D01A828DD70065C8A9 /* CTXPropertyDescriptor.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AC8E91B21A828D5F0065C8A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AC8E91BE1A828D5F0065C8A9 /* CTXPropertyMapperTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AC8E91B91A828D5F0065C8A9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC8E91AA1A828D5F0065C8A9 /* CTXPropertyMapper */;
+			targetProxy = AC8E91B81A828D5F0065C8A9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AC8E91BF1A828D5F0065C8A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		AC8E91C01A828D5F0065C8A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		AC8E91C21A828D5F0065C8A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CTXPropertyMapper/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		AC8E91C31A828D5F0065C8A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CTXPropertyMapper/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		AC8E91C51A828D5F0065C8A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CTXPropertyMapperTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AC8E91C61A828D5F0065C8A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CTXPropertyMapperTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AC8E91A51A828D5F0065C8A9 /* Build configuration list for PBXProject "CTXPropertyMapper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC8E91BF1A828D5F0065C8A9 /* Debug */,
+				AC8E91C01A828D5F0065C8A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC8E91C11A828D5F0065C8A9 /* Build configuration list for PBXNativeTarget "CTXPropertyMapper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC8E91C21A828D5F0065C8A9 /* Debug */,
+				AC8E91C31A828D5F0065C8A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AC8E91C41A828D5F0065C8A9 /* Build configuration list for PBXNativeTarget "CTXPropertyMapperTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC8E91C51A828D5F0065C8A9 /* Debug */,
+				AC8E91C61A828D5F0065C8A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AC8E91A21A828D5F0065C8A9 /* Project object */;
+}
