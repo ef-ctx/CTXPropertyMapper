@@ -4,7 +4,7 @@ Simple property mapper that solves the most common parsing problems.
 
 - Data Validation
 - Type conversion
-- Handle optimal properties
+- Handle optional properties
 - Simple to use and highly extensible  
 
 ## Prerequisites
@@ -37,7 +37,7 @@ Assuming the following model:
 @end
 ````
 
-and receving the following json object:
+and receiving the following json object:
 
 ````json
 {
@@ -78,7 +78,7 @@ NSDictionary *output = [mapper exportObject:user];
 
 ## Advanced usage
 
-CTXPropertyMapper is flexible enough to parse complex and chained objects.
+CTXPropertyMapper is flexible enough to parse complex and nested objects.
 
 ````objc
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
