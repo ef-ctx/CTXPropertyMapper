@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target = '6.0'
   spec.requires_arc = true
   
-  spec.source   = { :git => 'git@github.com:ef-ctx/CTXPropertyMapper.git', :tag => spec.version.to_s }
+  spec.source   = { :git => 'https://github.com/ef-ctx/CTXPropertyMapper.git', :tag => spec.version.to_s }
   spec.source_files = 'CTXPropertyMapper/*.{h,m}'
   
 end
