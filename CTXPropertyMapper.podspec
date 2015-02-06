@@ -1,21 +1,21 @@
-Pod::Spec.new do |s|
+Pod::Spec.new do |spec|
   
-  s.name     = 'CTXPropertyMapper'
-  s.version  = '1.0.0'
-  s.summary  = 'Simple and highly extensible two ways property mapper'
-  s.homepage = "https://github.com/ef-ctx/CTXPropertyMapper"
+  spec.name     = 'CTXPropertyMapper'
+  spec.version  = '1.0.0'
+  spec.summary  = 'Simple and highly extensible two ways property mapper'
+  spec.homepage = "https://github.com/ef-ctx/CTXPropertyMapper"
   
-  s.license      = { :type => 'MIT', :file => 'LICENSE' }
+  spec.license      = { :type => 'MIT', :file => 'LICENSE' }
 
-  s.authors      = {
+  spec.authors      = {
     "Mário Araújo" => "mario.araujo@ef.com"
   }
 
-  s.platform     = :ios
-  s.ios.deployment_target = '6.0'
-  s.requires_arc = true
+  spec.platform     = :ios
+  spec.ios.deployment_target = '6.0'
+  spec.requires_arc = true
   
-  s.source   = { :git => 'git@github.com:ef-ctx/CTXPropertyMapper.git', :tag => spec.version.to_s }
-  s.source_files = 'CTXPropertyMapper/*.{h,m}'
+  spec.source   = { :git => 'git@github.com:ef-ctx/CTXPropertyMapper.git', :tag => spec.version.to_s }
+  spec.source_files = 'CTXPropertyMapper/*.{h,m}'
   
 end
