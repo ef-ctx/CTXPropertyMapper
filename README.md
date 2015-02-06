@@ -2,21 +2,21 @@
 
 Simple property mapper that solves the most common parsing problems. 
 
-- Data Validations
-- Type conversions
+- Data Validation
+- Type conversion
 - Handle optimal properties
-- Simple to use, and highly extensible  
+- Simple to use and highly extensible  
 
 ## Prerequisites
 
-CTXPropertyMapper advantages of recent Objective-C runtime advances, including ARC and blocks. It requires:
+CTXPropertyMapper takes advantage of recent Objective-C runtime additions, including ARC and blocks. It requires:
 
 - iOS 6 or later.
 - OS X 10.7 or later.
 
 ## Installing
 
-To install using CocoaPods, add the following line to your project Podfile:
+To install using CocoaPods add the following line to your project Podfile:
 
 ````ruby
 pod 'CTXPropertyMapper'
@@ -24,7 +24,7 @@ pod 'CTXPropertyMapper'
 
 ## Example of usage
 
-Assuming the follow model:
+Assuming the following model:
 
 ````objc
 @interface User : NSObject
@@ -37,7 +37,7 @@ Assuming the follow model:
 @end
 ````
 
-receving the follow json format:
+and receving the following json object:
 
 ````json
 {
@@ -57,7 +57,7 @@ receving the follow json format:
 }
 ````
 
-follow the parsing code:
+the property mapper can be configured like so:
 
 ````objc
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
@@ -78,7 +78,7 @@ NSDictionary *output = [mapper exportObject:user];
 
 ## Advanced usage
 
-CTXPropertyMapper is flexible enought to parse complex and chained objects.
+CTXPropertyMapper is flexible enough to parse complex and chained objects.
 
 ````objc
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
@@ -108,7 +108,7 @@ CTXValueGenerationBlock *encodeOrigin = ^id(id object){
 
 [mapper addMappings:@{@"title":CTXProperty(title),
 					  @"sector":CTXProperty(sector),
-					  @"hours"::CTXProperty(hours),
+					  @"hours":CTXProperty(hours),
 					  }
 		   forClass:[Job class]];
 
@@ -125,7 +125,7 @@ User *user = [mapper createObjectWithClass:[User class] fromDictionary:dictionar
 
 ## Custom Factory
 
-CTXPropertyMapper uses the default object initializer internally, but some technologies like CoreData requires a custom initializer. To support that you can use your own custom Factory implementing the protocol `CTXPropertyMapperModelFactoryProtocol`. The factory receive the class type and the dictionary for greater flexibility, allowing use models already created, fetching model instance from local storage.
+CTXPropertyMapper uses the default object initializer internally, but some technologies like CoreData require a custom initializer. To support that you can use your own custom Factory implementing the protocol `CTXPropertyMapperModelFactoryProtocol`. The factory receives the class type and a dictionary for added flexibility, allowing the use of already created models, or fetching model instance from the local storage.
 
 ````objc
 @interface CoreDataModelFactory : NSObject<CTXPropertyMapperModelFactoryProtocol>
@@ -149,7 +149,7 @@ CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] initWithModelFactory:[[Co
 
 ## Automatic Mappings
 
-Usually the client model has the same structure of the server. To avoid repetitive code, CTXPropertyMapper supports creating models automatically.
+Usually the client model has the same structure as the server. To avoid repetitive code, CTXPropertyMapper supports creating models automatically.
 
 ````objc
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init]];
@@ -158,7 +158,7 @@ CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init]];
 		   forClass:[Job class]];
 ````
 We use some objective c runtime calls to create a valid mapper, ignoring pointer address, blocks, selectors, etc.
-Follow the currentyl supported properties:
+Currently supported properties:
 - NSString
 - NSNumber
 - char
@@ -173,11 +173,11 @@ Follow the currentyl supported properties:
 
 ### Limitations
 
-Currently mappings generation doesn't consider inherited properties, created by protocols or dynamically create by the runtime. So use wisely in simple models.
+Mapping generation doesn't consider inherited properties, created through protocols or dynamically created through the runtime, so use it wisely.
 
 ## Helpers
 
-If your local model shares the property names with the remote model, but you don't want to map the hole object like automatic mapping does, you can use the method `+ (NSDictionary *)generateMappingsWithKeys:(NSArray *)keys`, passing the array of properties that you want to map.
+If your local model shares property names with the remote model, but you don't want to map the whole object like the automatic mapping does, you can use the method `+ (NSDictionary *)generateMappingsWithKeys:(NSArray *)keys`, passing the array of properties that you want to map.
 
 ````objc
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init]];
@@ -194,11 +194,7 @@ You can add validations to your mappings.
 [mapper addMappings:[CTXPropertyMapper generateMappingsFromClass:[Job class]]
 		   forClass:[Job class]];
 ````
-If necessaire you can create your own validations, get inspired by looking at the category `CTXPropertyDescriptor+Validators(h,m)`.
-
-### Buil-in validations
-
-Code borrowed from our inspiration project [KZPropertyMapper](https://github.com/krzysztofzablocki/KZPropertyMapper)
+If necessary, you can create your own validations, get inspired by looking at the category `CTXPropertyDescriptor+Validators(h,m)`.
 
 #### Strings
 * isRequired
@@ -218,4 +214,3 @@ Code borrowed from our inspiration project [KZPropertyMapper](https://github.com
 ## License
 
 CTXPropertyMapper is released under a MIT License. See LICENSE file for details.
-
