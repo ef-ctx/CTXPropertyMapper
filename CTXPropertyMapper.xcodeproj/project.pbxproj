@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		639F54E11A8F5D790069D52E /* CTXMultiMappingTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 639F54E01A8F5D790069D52E /* CTXMultiMappingTest.m */; };
+		639F54E51A8F5D8E0069D52E /* TestData.json in Resources */ = {isa = PBXBuildFile; fileRef = 639F54E21A8F5D8E0069D52E /* TestData.json */; };
+		639F54E61A8F5D8E0069D52E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 639F54E41A8F5D8E0069D52E /* User.m */; };
 		AC8E91B11A828D5F0065C8A9 /* CTXPropertyMapper.h in Headers */ = {isa = PBXBuildFile; fileRef = AC8E91B01A828D5F0065C8A9 /* CTXPropertyMapper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AC8E91B71A828D5F0065C8A9 /* CTXPropertyMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC8E91AB1A828D5F0065C8A9 /* CTXPropertyMapper.framework */; };
 		AC8E91BE1A828D5F0065C8A9 /* CTXPropertyMapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8E91BD1A828D5F0065C8A9 /* CTXPropertyMapperTests.m */; };
@@ -31,6 +34,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		639F54E01A8F5D790069D52E /* CTXMultiMappingTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTXMultiMappingTest.m; sourceTree = "<group>"; };
+		639F54E21A8F5D8E0069D52E /* TestData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestData.json; sourceTree = "<group>"; };
+		639F54E31A8F5D8E0069D52E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		639F54E41A8F5D8E0069D52E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		AC8E91AB1A828D5F0065C8A9 /* CTXPropertyMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CTXPropertyMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC8E91AF1A828D5F0065C8A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC8E91B01A828D5F0065C8A9 /* CTXPropertyMapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTXPropertyMapper.h; sourceTree = "<group>"; };
@@ -112,6 +119,7 @@
 		AC8E91BA1A828D5F0065C8A9 /* CTXPropertyMapperTests */ = {
 			isa = PBXGroup;
 			children = (
+				639F54E01A8F5D790069D52E /* CTXMultiMappingTest.m */,
 				AC8E91BD1A828D5F0065C8A9 /* CTXPropertyMapperTests.m */,
 				AC8E91BB1A828D5F0065C8A9 /* Supporting Files */,
 			);
@@ -121,6 +129,9 @@
 		AC8E91BB1A828D5F0065C8A9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				639F54E21A8F5D8E0069D52E /* TestData.json */,
+				639F54E31A8F5D8E0069D52E /* User.h */,
+				639F54E41A8F5D8E0069D52E /* User.m */,
 				AC8E91BC1A828D5F0065C8A9 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -227,6 +238,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				639F54E51A8F5D8E0069D52E /* TestData.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -248,7 +260,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				639F54E11A8F5D790069D52E /* CTXMultiMappingTest.m in Sources */,
 				AC8E91BE1A828D5F0065C8A9 /* CTXPropertyMapperTests.m in Sources */,
+				639F54E61A8F5D8E0069D52E /* User.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
