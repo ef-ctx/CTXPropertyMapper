@@ -10,7 +10,7 @@
 
 @interface User : NSObject
 
-@property (nonatomic, strong) NSString *firstNameSomething;
+@property (nonatomic, strong) NSString *firstNameDifferent;
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, assign) BOOL active;
 

@@ -23,7 +23,7 @@
     NSDictionary *mappings = [CTXPropertyMapper generateMappingsFromClass:[User class]];
     [mapper addMappings:mappings
                forClass:[User class]];
-    [mapper addMappings:@{@"firstName":CTXProperty(firstNameSomething)}
+    [mapper addMappings:@{@"firstName":CTXProperty(firstNameDifferent)}
                forClass:[User class]];
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
     NSString *path = [bundle pathForResource:@"TestData" ofType:@"json"];
@@ -36,7 +36,7 @@
     
     NSArray *errors = nil;
     User *user = [mapper createObjectWithClass:[User class] fromDictionary:json errors:&errors];
-    XCTAssert([user.firstNameSomething isEqualToString:@"Jon"]);
+    XCTAssert([user.firstNameDifferent isEqualToString:@"Jon"]);
 }
 
 @end
