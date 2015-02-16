@@ -37,7 +37,7 @@ typedef void(^CTXValueConsumerBlock)(id input, id object);
 
 @interface CTXPropertyDescriptor : NSObject
 @property (nonatomic, readonly) NSString *propertyName;
-@property (nonatomic, readonly) Class propertyClass;
+@property (nonatomic, assign, readonly) Class propertyClass;
 @property (nonatomic, readonly) NSMutableArray *validationBlocks;
 @property (nonatomic, readonly) CTXValueTransformerBlock encodingBlock;
 @property (nonatomic, readonly) CTXValueTransformerBlock decodingBlock;
@@ -51,7 +51,7 @@ typedef void(^CTXValueConsumerBlock)(id input, id object);
 - (instancetype)initWithPropertyName:(NSString *)propertyName withClass:(Class)clazz;
 - (instancetype)initWithPropertyName:(NSString *)propertyName withClass:(Class)clazz mode:(enum CTXPropertyMapperCodificationMode)mode;
 - (instancetype)initWithPropertyName:(NSString *)propertyName encondingBlock:(CTXValueTransformerBlock)encoder decodingBlock:(CTXValueTransformerBlock)decoder;
-- (instancetype)initWithEncondingGenerationBlock:(CTXValueGenerationBlock)encoder decodingConsumerBlock:(CTXValueConsumerBlock)decoder;
+- (instancetype)initWithEncodingGenerationBlock:(CTXValueGenerationBlock)encoder decodingConsumerBlock:(CTXValueConsumerBlock)decoder;
 
 - (void)addValidatorWithName:(NSString *)name validation:(BOOL (^)(id value))validator;
 - (NSArray *)validateValue:(id)value;

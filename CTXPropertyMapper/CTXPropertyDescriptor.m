@@ -82,7 +82,7 @@
     return self;
 }
 
-- (instancetype)initWithEncondingGenerationBlock:(CTXValueGenerationBlock)encoder decodingConsumerBlock:(CTXValueConsumerBlock)decoder
+- (instancetype)initWithEncodingGenerationBlock:(CTXValueGenerationBlock)encoder decodingConsumerBlock:(CTXValueConsumerBlock)decoder
 {
     if (self = [super init]) {
         _type = CTXPropertyDescriptorTypeAsymmetricalBlock;
@@ -104,7 +104,7 @@
     return self;
 }
 
-- (void)addValidatonWithBlock:(NSError * (^)(NSString *name, NSString *))validationBlock
+- (void)addValidationWithBlock:(NSError * (^)(NSString *name, NSString *))validationBlock
 {
     if (!self.validationBlocks) {
         self.validationBlocks = [NSMutableArray new];
@@ -115,18 +115,18 @@
 
 - (void)addValidatorWithName:(NSString *)name validation:(BOOL (^)(id value))validator
 {
-    [self addValidatonWithBlock:^NSError *(NSString *value, NSString *propertyName) {
+    [self addValidationWithBlock:^NSError *(NSString *value, NSString *propertyName) {
         BOOL validationResult = validator(value);
         if ([value isKindOfClass:NSNull.class] || !value || !validationResult) {
             NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeValidationFailed), name, propertyName];
-            
+
             NSError *error = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
                                                  code:CTXPropertyMapperErrorCodeValidationFailed
-                                             userInfo:@{NSLocalizedDescriptionKey:description}];
-            
+                                             userInfo:@{NSLocalizedDescriptionKey : description}];
+
             return error;
         }
-        return (NSError *)nil;
+        return (NSError *) nil;
     }];
 }
 

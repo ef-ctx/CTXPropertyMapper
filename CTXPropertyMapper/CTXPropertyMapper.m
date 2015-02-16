@@ -162,8 +162,8 @@
         if ((descriptor.mode & CTXPropertyMapperCodificationModeEncode) == CTXPropertyMapperCodificationModeEncode) {
             NSArray *parts = [key componentsSeparatedByString:@"."];
             __block NSMutableDictionary *currentDictionary = exportedObject;
-            [parts enumerateObjectsUsingBlock:^(NSString *part, NSUInteger idx, BOOL *stop) {
-                if (idx == parts.count - 1) {
+            [parts enumerateObjectsUsingBlock:^(NSString *part, NSUInteger index, BOOL *stp) {
+                if (index == parts.count - 1) {
                     id value = [self _getSafeValueForKey:descriptor.propertyName atObject:object];
                     if (!value && options == CTXPropertyMapperExportOptionIncludeNullValue) {
                         value = [NSNull  null];
@@ -178,13 +178,13 @@
                         {
                             if ([value isKindOfClass:NSSet.class]) {
                                 NSMutableArray *items = [NSMutableArray array];
-                                [(NSSet *)value enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+                                [(NSSet *)value enumerateObjectsUsingBlock:^(id obj, BOOL *s) {
                                     [items addObject:[self exportObject:obj]];
                                 }];
                                 [currentDictionary setValue:items forKey:part];
                             }else if ([value isKindOfClass:NSArray.class] || [value isKindOfClass:NSOrderedSet.class]) {
                                 NSMutableArray *items = [NSMutableArray array];
-                                [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                                [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
                                     [items addObject:[self exportObject:obj]];
                                 }];
                                 [currentDictionary setValue:items forKey:part];
@@ -325,7 +325,7 @@
                         [self _setSafeValue:subInstance forKey:descriptor.propertyName toObject:instance];
                     } else if ([value isKindOfClass:NSArray.class]) {
                         NSMutableArray *items = [NSMutableArray array];
-                        [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
                             [items addObject:[self _createObjectWithClass:descriptor.propertyClass fromDictionary:obj]];
                         }];
                         [self _setSafeValue:items forKey:descriptor.propertyName toObject:instance];
@@ -425,10 +425,10 @@
         switch (descriptor.type) {
             case CTXPropertyDescriptorTypeClass:
             {
-                NSDictionary *submapping = self.mappingsByClass[[descriptor.propertyClass description]];
+                NSDictionary *subMapping = self.mappingsByClass[[descriptor.propertyClass description]];
                 
-                if (submapping) {
-                    NSArray *validationErrors = [self _validateMapping:submapping withValues:value];
+                if (subMapping) {
+                    NSArray *validationErrors = [self _validateMapping:subMapping withValues:value];
                     if (validationErrors) {
                         [errors addObjectsFromArray:validationErrors];
                     }

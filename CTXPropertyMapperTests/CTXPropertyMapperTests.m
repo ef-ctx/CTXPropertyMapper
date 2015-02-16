@@ -31,6 +31,7 @@
 @property (nonatomic, retain, readonly) ItemClass *itemClass;
 @property (nonatomic, retain, readonly) NSOrderedSet *orderedSet;
 @property (nonatomic, assign, readonly) BOOL usingCustomInit;
+- (instancetype)initWithName:(NSString *)name;
 @end
 @implementation BaseClass
 - (instancetype)initWithName:(NSString *)name
