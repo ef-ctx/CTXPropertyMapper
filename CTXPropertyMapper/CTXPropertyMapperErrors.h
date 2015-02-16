@@ -18,4 +18,4 @@ typedef NS_ENUM(NSUInteger, CTXPropertyMapperErrorCode) {
     
 };
 
-extern NSString *const CTXPropertyMapperErrorDescription[];
+extern NSString *CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCode code);

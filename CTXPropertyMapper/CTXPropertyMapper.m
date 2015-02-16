@@ -127,7 +127,7 @@
     NSArray *validationErrors = nil;
     
     if (!mappings) {
-        NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeMapperDidNotFound],
+        NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeMapperDidNotFound),
                                  [clazz description]];
         
         NSError *error = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
@@ -362,10 +362,10 @@
 		if (![key isKindOfClass:[NSString class]] || ![descriptor isKindOfClass:[CTXPropertyDescriptor class]]) {
 			mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
 											   code:CTXPropertyMapperErrorCodeInvalidMapperFormat
-										   userInfo:@{NSLocalizedDescriptionKey:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeInvalidMapperFormat]}];
+										   userInfo:@{NSLocalizedDescriptionKey:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeInvalidMapperFormat)}];
 			*stop = YES;
 		} else if (!properties[descriptor.propertyName]) {
-			NSString *author = [NSString stringWithFormat:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeUnknownProperty],
+			NSString *author = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeUnknownProperty),
 								descriptor.propertyName, [clazz description]];
 			mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
 											   code:CTXPropertyMapperErrorCodeUnknownProperty
@@ -433,7 +433,7 @@
                         [errors addObjectsFromArray:validationErrors];
                     }
                 } else {
-                    NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeMapperDidNotFound], [descriptor.propertyClass description]];
+                    NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeMapperDidNotFound), [descriptor.propertyClass description]];
                     
                     NSError *error = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
                                                          code:CTXPropertyMapperErrorCodeMapperDidNotFound

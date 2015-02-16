@@ -118,7 +118,7 @@
     [self addValidatonWithBlock:^NSError *(NSString *value, NSString *propertyName) {
         BOOL validationResult = validator(value);
         if ([value isKindOfClass:NSNull.class] || !value || !validationResult) {
-            NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeValidationFailed], name, propertyName];
+            NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeValidationFailed), name, propertyName];
             
             NSError *error = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
                                                  code:CTXPropertyMapperErrorCodeValidationFailed

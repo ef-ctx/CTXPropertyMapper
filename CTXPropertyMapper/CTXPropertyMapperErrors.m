@@ -10,9 +10,17 @@
 
 NSString *const kCTXPropertyMapperErrorDomain = @"com.ef.ctx.property-mapper";
 
-NSString *const CTXPropertyMapperErrorDescription[] = {
-    [CTXPropertyMapperErrorCodeUnknownProperty]     = @"Mapper contains a not found property [%@] on class [%@]",
-    [CTXPropertyMapperErrorCodeInvalidMapperFormat] = @"Property Mapper is invalid.",
-    [CTXPropertyMapperErrorCodeMapperDidNotFound]   = @"Mapper for class [%@] not found",
-    [CTXPropertyMapperErrorCodeValidationFailed]    = @"%@ validation failed on %@"
-};
+extern NSString *CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCode code)
+{
+    static NSDictionary *descriptions = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        descriptions = @{
+                @(CTXPropertyMapperErrorCodeUnknownProperty)     : @"Property Mapper contains a not found property [%@] on class [%@]",
+                @(CTXPropertyMapperErrorCodeInvalidMapperFormat) : @"Property Mapper is invalid.",
+                @(CTXPropertyMapperErrorCodeMapperDidNotFound)   : @"Property Mapper for class [%@] is not found",
+                @(CTXPropertyMapperErrorCodeValidationFailed)    : @"[%@] validation failed on [%@]"
+        };
+    });
+    return descriptions[@(code)];
+}

@@ -164,6 +164,7 @@
 	
 	XCTAssert(error);
 	XCTAssert(error.code == CTXPropertyMapperErrorCodeInvalidMapperFormat);
+    XCTAssertNotNil(error.description);
 }
 
 - (void)testValidationErrors
@@ -192,6 +193,7 @@
 	
 	NSError *error = errors.firstObject;
 	XCTAssert(error.code == CTXPropertyMapperErrorCodeMapperDidNotFound);
+    XCTAssertNotNil(error.description);
 }
 
 - (void)testEncodeOnly
@@ -308,6 +310,7 @@
 	
 	NSError *error = errors[0];
 	XCTAssert(error.code == CTXPropertyMapperErrorCodeValidationFailed);
+    XCTAssertNotNil(error.description);
 }
 
 
@@ -404,6 +407,7 @@
 	
 	XCTAssert(error);
 	XCTAssert(error.code == CTXPropertyMapperErrorCodeUnknownProperty);
+    XCTAssertNotNil(error.description);
 	
 	NSArray *errors = nil;
 	BaseClass *instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source errors:&errors];
@@ -412,6 +416,7 @@
 	
 	error = errors[0];
 	XCTAssert(error.code == CTXPropertyMapperErrorCodeMapperDidNotFound);
+    XCTAssertNotNil(error.description);
 }
 
 - (void)testUnknownDictProperty
