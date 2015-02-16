@@ -1,0 +1,15 @@
+{
+"avatarURL": "http://server.com/avatarurlpath",
+"firstName": "Jon",
+"lastName": "Snow",
+"origin": "Winterfell, The North, Westeros",
+"quote":"you know nothing Jon Snow (Ygritte)",
+"status":{
+"alive":true
+},
+"job": {
+"title":"The bastard of Winterfell",
+"sector":"Castle Black",
+"hours":"Full Time"
+}
+}

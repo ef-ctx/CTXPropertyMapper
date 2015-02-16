@@ -91,7 +91,10 @@
     }
     
     if (!mappingError) {
-        self.mappingsByClass[[clazz description]] = mappings;
+        if (!self.mappingsByClass[[clazz description]]) {
+            self.mappingsByClass[[clazz description]] = [NSMutableDictionary dictionary];
+        }
+        [self.mappingsByClass[[clazz description]] addEntriesFromDictionary:mappings];
     }
     
     return !mappingError;
