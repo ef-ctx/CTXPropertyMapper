@@ -32,8 +32,7 @@
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data
                                                          options:kNilOptions
                                                            error:nil];
-    NSLog(@"%@", json);
-    
+	
     NSArray *errors = nil;
     User *user = [mapper createObjectWithClass:[User class] fromDictionary:json errors:&errors];
     XCTAssert([user.firstNameDifferent isEqualToString:@"Jon"]);
