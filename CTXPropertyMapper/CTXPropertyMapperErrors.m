@@ -3,7 +3,7 @@
 //  Pods
 //
 //  Created by Mario on 15/12/2014.
-//
+//  Copyright (c) 2015 EF Ltd. All rights reserved.
 //
 
 #import "CTXPropertyMapperErrors.h"

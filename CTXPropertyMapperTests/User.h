@@ -3,7 +3,7 @@
 //  OOGUiCommon
 //
 //  Created by David Carvalho on 13/02/2015.
-//  Copyright (c) 2015 Ocado Ltd. All rights reserved.
+//  Copyright (c) 2015 EF Ltd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
