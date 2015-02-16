@@ -30,6 +30,9 @@ typedef NS_ENUM(NSUInteger, CTXPropertyMapperExportOption) {
 
 - (BOOL)addMappings:(NSDictionary *)mappings forClass:(Class)clazz;
 - (BOOL)addMappings:(NSDictionary *)mappings forClass:(Class)clazz error:(NSError *__autoreleasing*)error;
+- (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz;
+- (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz error:(NSError *__autoreleasing*)error;
+- (BOOL)removeMappingsForClass:(Class)clazz;
 - (void)addMappingsFromPropertyMapper:(CTXPropertyMapper *)propertyMapper;
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary;
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary errors:(NSArray *__autoreleasing*)errors;

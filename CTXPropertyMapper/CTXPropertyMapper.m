@@ -65,31 +65,12 @@
 
 - (BOOL)addMappings:(NSDictionary *)mappings forClass:(Class)clazz error:(NSError *__autoreleasing*)error
 {
-    __block NSError *mappingError;
-    
-    NSDictionary *properties = [self propertiesForClass:clazz];
-    
-    [mappings enumerateKeysAndObjectsUsingBlock:^(id key, CTXPropertyDescriptor *descriptor, BOOL *stop) {
-        
-        if (![key isKindOfClass:[NSString class]] || ![descriptor isKindOfClass:[CTXPropertyDescriptor class]]) {
-            mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
-                                               code:CTXPropertyMapperErrorCodeInvalidMapperFormat
-                                           userInfo:@{NSLocalizedDescriptionKey:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeInvalidMapperFormat]}];
-            *stop = YES;
-        } else if (!properties[descriptor.propertyName]) {
-            NSString *author = [NSString stringWithFormat:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeUnknownProperty],
-                                descriptor.propertyName, [clazz description]];
-            mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
-                                               code:CTXPropertyMapperErrorCodeUnknownProperty
-                                           userInfo:@{NSLocalizedDescriptionKey:author}];
-            *stop = YES;
-        }
-    }];
-    
-    if (error != NULL) {
-        *error = mappingError;
-    }
-    
+	NSError *mappingError = [self _validateMappings:mappings forClass:clazz];
+	
+	if (error != NULL) {
+		*error = mappingError;
+	}
+	
     if (!mappingError) {
         if (!self.mappingsByClass[[clazz description]]) {
             self.mappingsByClass[[clazz description]] = [NSMutableDictionary dictionary];
@@ -103,6 +84,36 @@
 - (void)addMappingsFromPropertyMapper:(CTXPropertyMapper *)propertyMapper
 {
     [self.mappingsByClass addEntriesFromDictionary:[propertyMapper mappingsByClass]];
+}
+
+- (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz
+{
+	return [self setMappings:mappings forClass:clazz error:nil];
+}
+
+- (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz error:(NSError *__autoreleasing*)error
+{
+	NSError *mappingError = [self _validateMappings:mappings forClass:clazz];
+	
+	if (error != NULL) {
+		*error = mappingError;
+	}
+	
+	if (!mappingError) {
+		self.mappingsByClass[[clazz description]] = [mappings copy];
+	}
+	
+	return !mappingError;
+}
+
+- (BOOL)removeMappingsForClass:(Class)clazz
+{
+	if (self.mappingsByClass[[clazz description]]) {
+		[self.mappingsByClass removeObjectForKey:[clazz description]];
+		return YES;
+	}
+	
+	return NO;
 }
 
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary
@@ -234,7 +245,7 @@
 
 #pragma mark - Private Methods
 
-- (NSDictionary *)propertiesForClass:(Class)clazz
+- (NSDictionary *)_propertiesForClass:(Class)clazz
 {
     NSDictionary *properties = self.cachedPropertiesByClass[[clazz description]];
     
@@ -276,7 +287,7 @@
     //TODO: Improve setValue verification
     
     if ([value isKindOfClass:NSArray.class]) {
-        NSDictionary *properties = [self propertiesForClass:[object class]];
+        NSDictionary *properties = [self _propertiesForClass:[object class]];
         //TODO: Actually doesn't support subclasses of the follow entities
         if ([properties[key] isEqualToString:[NSArray description]] || [properties[key] isEqualToString:[NSMutableArray description]]) {
             [object setValue:value forKey:key];
@@ -336,6 +347,35 @@
 }
 
 #pragma mark - Validations
+
+- (NSError *)_validateMappings:(NSDictionary *)mappings forClass:(Class)clazz
+{
+	NSParameterAssert(mappings);
+	NSParameterAssert(clazz);
+	
+	__block NSError *mappingError;
+	
+	NSDictionary *properties = [self _propertiesForClass:clazz];
+	
+	[mappings enumerateKeysAndObjectsUsingBlock:^(id key, CTXPropertyDescriptor *descriptor, BOOL *stop) {
+		
+		if (![key isKindOfClass:[NSString class]] || ![descriptor isKindOfClass:[CTXPropertyDescriptor class]]) {
+			mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
+											   code:CTXPropertyMapperErrorCodeInvalidMapperFormat
+										   userInfo:@{NSLocalizedDescriptionKey:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeInvalidMapperFormat]}];
+			*stop = YES;
+		} else if (!properties[descriptor.propertyName]) {
+			NSString *author = [NSString stringWithFormat:CTXPropertyMapperErrorDescription[CTXPropertyMapperErrorCodeUnknownProperty],
+								descriptor.propertyName, [clazz description]];
+			mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
+											   code:CTXPropertyMapperErrorCodeUnknownProperty
+										   userInfo:@{NSLocalizedDescriptionKey:author}];
+			*stop = YES;
+		}
+	}];
+	
+	return mappingError;
+}
 
 - (NSArray *)_validateMapping:(NSDictionary *)mapping withValues:(id)values
 {

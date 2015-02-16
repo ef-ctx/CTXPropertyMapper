@@ -525,5 +525,46 @@
 	XCTAssert(instance.usingCustomInit);
 }
 
+- (void)testSetMappings
+{
+	CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+	
+	NSDictionary *source = @{@"title":@"source title"};
+	
+	[mapper setMappings:@{@"title":CTXProperty(title)}
+			   forClass:[BaseClass class]];
+	
+	BaseClass *instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source];
+	XCTAssert(instance);
+	XCTAssert(instance.name == nil);
+	XCTAssert([instance.title isEqualToString:@"source title"]);
+
+	[mapper setMappings:@{@"title":CTXProperty(name)}
+			   forClass:[BaseClass class]];
+	
+	instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source];
+	XCTAssert(instance);
+	XCTAssert(instance.title == nil);
+	XCTAssert([instance.name isEqualToString:@"source title"]);
+}
+
+- (void)testRemoveMappings
+{
+	CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+	
+	NSDictionary *source = @{@"title":@"source title"};
+	
+	[mapper setMappings:@{@"title":CTXProperty(title)}
+			   forClass:[BaseClass class]];
+	
+	BaseClass *instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source];
+	XCTAssert(instance);
+	
+	[mapper removeMappingsForClass:[BaseClass class]];
+	instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source];
+	XCTAssert(instance == nil);
+}
+
+
 
 @end
