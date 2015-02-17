@@ -15,7 +15,7 @@
 #define CTXClassEncode(property, clazz) ({[[CTXPropertyDescriptor alloc] initWithPropertyName:@#property withClass:clazz mode:CTXPropertyMapperCodificationModeEncode];})
 #define CTXClassDecode(property, clazz) ({[[CTXPropertyDescriptor alloc] initWithPropertyName:@#property withClass:clazz mode:CTXPropertyMapperCodificationModeDecode];})
 #define CTXBlock(property, encoder, decoder) ({[[CTXPropertyDescriptor alloc] initWithPropertyName:@#property encondingBlock:encoder decodingBlock:decoder];})
-#define CTXGenerationConsumerBlock(encoder, decoder) ({[[CTXPropertyDescriptor alloc] initWithEncondingGenerationBlock:encoder decodingConsumerBlock:decoder];})
+#define CTXGenerationConsumerBlock(encoder, decoder) ({[[CTXPropertyDescriptor alloc] initWithEncodingGenerationBlock:encoder decodingConsumerBlock:decoder];})
 
 typedef NS_ENUM(NSUInteger, CTXPropertyMapperCodificationMode) {
     CTXPropertyMapperCodificationModeEncode             = 1,

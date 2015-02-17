@@ -126,7 +126,7 @@
 
             return error;
         }
-        return (NSError *) nil;
+        return nil;
     }];
 }
 
