@@ -364,7 +364,7 @@
 											   code:CTXPropertyMapperErrorCodeInvalidMapperFormat
 										   userInfo:@{NSLocalizedDescriptionKey:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeInvalidMapperFormat)}];
 			*stop = YES;
-		} else if (!properties[descriptor.propertyName]) {
+		} else if (descriptor.type != CTXPropertyDescriptorTypeAsymmetricalBlock && !properties[descriptor.propertyName]) {
 			NSString *author = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeUnknownProperty),
 								descriptor.propertyName, [clazz description]];
 			mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain

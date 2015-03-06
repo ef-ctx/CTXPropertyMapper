@@ -571,6 +571,25 @@
 	XCTAssert(instance == nil);
 }
 
+-  (void)testAsymmetricalMappings
+{
+	CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+	
+	NSDictionary *source = @{@"title":@"source title",
+							 @"consume":@"consume value"};
+
+	[mapper setMappings:@{@"title":CTXProperty(title),
+						  @"export":CTXGenerationConsumerBlock(^(id object){return @"exported property";}, nil),
+						  @"consume":CTXGenerationConsumerBlock(nil, ^(id input, id object){ XCTAssert([input isEqualToString:@"consume value"]);})}
+			   forClass:[BaseClass class]];
+	
+	BaseClass *instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source];
+	XCTAssert(instance);
+	
+	NSDictionary *dict = [mapper exportObject:instance];
+	XCTAssert(dict != nil);
+	XCTAssert([dict[@"export"] isEqualToString:@"exported property"]);
+}
 
 
 @end
