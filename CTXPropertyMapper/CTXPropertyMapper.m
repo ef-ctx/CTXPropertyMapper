@@ -42,6 +42,13 @@
 @end
 
 
+@interface NSMutableArray (CTXSetSafeValueForKey)
+
+- (void)ctx_safeAddObject:(id)object;
+
+@end
+
+
 @interface CTXPropertyMapperSimpleModelFactory : NSObject<CTXPropertyMapperModelFactoryProtocol>
 
 @end
@@ -386,6 +393,10 @@
 
 - (id)_createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary
 {
+	if(![dictionary isKindOfClass:[NSDictionary class]]) {
+		return nil;
+	}
+	
     NSDictionary *mappings = self.mappingsByClass[[clazz description]];
     
     id instance = [self.modelFactory instanceForClass:clazz withDictionary:dictionary];
@@ -407,7 +418,7 @@
                     } else if ([value isKindOfClass:NSArray.class]) {
                         NSMutableArray *items = [NSMutableArray array];
                         [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
-                            [items addObject:[self _createObjectWithClass:descriptor.propertyClass fromDictionary:obj]];
+                            [items ctx_safeAddObject:[self _createObjectWithClass:descriptor.propertyClass fromDictionary:obj]];
                         }];
                         [self _setSafeValue:items forKey:descriptor.propertyName toObject:instance];
                     }
@@ -811,6 +822,19 @@ NSString * getPropertyType(objc_property_t property) {
 	}
 	
 	return returnArray;
+}
+
+@end
+
+@implementation NSMutableArray (CTXSetSafeValueForKey)
+
+- (void)ctx_safeAddObject:(id)object
+{
+	if(object == nil) {
+		return;
+	}
+	
+	[self addObject:object];
 }
 
 @end
