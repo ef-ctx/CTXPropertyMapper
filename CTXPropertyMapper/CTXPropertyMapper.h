@@ -19,25 +19,45 @@ FOUNDATION_EXPORT double CTXPropertyMapperVersionNumber;
 FOUNDATION_EXPORT const unsigned char CTXPropertyMapperVersionString[];
 
 typedef NS_ENUM(NSUInteger, CTXPropertyMapperExportOption) {
-    CTXPropertyMapperExportOptionExcludeNullValue,
-    CTXPropertyMapperExportOptionIncludeNullValue
+	CTXPropertyMapperExportOptionExcludeNullValue,
+	CTXPropertyMapperExportOptionIncludeNullValue
 };
 
+typedef void(^CTXFinalMappingDecoderBlock)(NSDictionary *input, id object);
+typedef void(^CTXFinalMappingEncoderBlock)(NSMutableDictionary *output, id object);
+
+typedef NS_ENUM(NSUInteger, CTXPropertyMapperFinalMappingDecoderOption) {
+	CTXPropertyMapperFinalMappingDecoderOptionIncludeAllKeys,
+	CTXPropertyMapperFinalMappingDecoderOptionExcludeAlreadyMappedKeys
+};
 
 @interface CTXPropertyMapper : NSObject
 
 - (instancetype)initWithModelFactory:(id<CTXPropertyMapperModelFactoryProtocol>)modelFactory;
 
+
 - (BOOL)addMappings:(NSDictionary *)mappings forClass:(Class)clazz;
 - (BOOL)addMappings:(NSDictionary *)mappings forClass:(Class)clazz error:(NSError *__autoreleasing*)error;
+
+- (void)addMappingsFromPropertyMapper:(CTXPropertyMapper *)propertyMapper;
+
+
 - (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz;
 - (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz error:(NSError *__autoreleasing*)error;
+
+- (void)setFinalMappingEncoder:(CTXFinalMappingEncoderBlock)encoder forClass:(Class)clazz;
+- (void)setFinalMappingDecoder:(CTXFinalMappingDecoderBlock)decoder forClass:(Class)clazz withOption:(CTXPropertyMapperFinalMappingDecoderOption)option;
+
 - (BOOL)removeMappingsForClass:(Class)clazz;
-- (void)addMappingsFromPropertyMapper:(CTXPropertyMapper *)propertyMapper;
+
+
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary;
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary errors:(NSArray *__autoreleasing*)errors;
+
+
 - (NSDictionary *)exportObject:(id)object;
 - (NSDictionary *)exportObject:(id)object withOptions:(enum CTXPropertyMapperExportOption)options;
+
 
 + (NSDictionary *)generateMappingsFromClass:(Class)clazz;
 + (NSDictionary *)generateMappingsWithKeys:(NSArray *)keys;

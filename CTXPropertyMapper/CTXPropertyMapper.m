@@ -19,6 +19,29 @@
 @end
 
 
+@interface NSDictionary (CTXMutableDeepCopy)
+
+- (NSMutableDictionary *)ctx_deepCopy;
+- (NSMutableDictionary *)ctx_mutableDeepCopy;
+
+@end
+
+
+@interface NSMutableDictionary (CTXSetSafeValueForKey)
+
+- (void)ctx_setSafeValue:(id)value forKey:(NSString *)key;
+
+@end
+
+
+@interface NSArray (CTXMutableDeepCopy)
+
+- (NSMutableArray *)ctx_deepCopy;
+- (NSMutableArray *)ctx_mutableDeepCopy;
+
+@end
+
+
 @interface CTXPropertyMapperSimpleModelFactory : NSObject<CTXPropertyMapperModelFactoryProtocol>
 
 @end
@@ -29,6 +52,10 @@
 @property (nonatomic, strong) NSMutableDictionary *cachedPropertiesByClass;
 @property (nonatomic, strong) NSMutableDictionary *mappingsByClass;
 
+@property (nonatomic, strong) NSMapTable *finalMappingEncodersByClass;
+@property (nonatomic, strong) NSMapTable *finalMappingDecodersByClass;
+@property (nonatomic, strong) NSMutableDictionary *finalMappingDecoderOptionByClass;
+
 @end
 
 
@@ -38,11 +65,15 @@
 
 - (instancetype)init
 {
-    if (self = [super init]) {
-        _mappingsByClass = [NSMutableDictionary dictionary];
-        _cachedPropertiesByClass = [NSMutableDictionary dictionary];
-        _modelFactory = [[CTXPropertyMapperSimpleModelFactory alloc] init];
-    }
+	if (self = [super init]) {
+		_mappingsByClass = [NSMutableDictionary dictionary];
+		_cachedPropertiesByClass = [NSMutableDictionary dictionary];
+		_modelFactory = [[CTXPropertyMapperSimpleModelFactory alloc] init];
+		
+		_finalMappingEncodersByClass = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsCopyIn];
+		_finalMappingDecodersByClass = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsCopyIn];
+		_finalMappingDecoderOptionByClass = [NSMutableDictionary dictionary];
+	}
     return self;
 }
 
@@ -84,6 +115,18 @@
 - (void)addMappingsFromPropertyMapper:(CTXPropertyMapper *)propertyMapper
 {
     [self.mappingsByClass addEntriesFromDictionary:[propertyMapper mappingsByClass]];
+	
+	for(NSString *className in propertyMapper.finalMappingEncodersByClass.keyEnumerator) {
+		[self.finalMappingEncodersByClass setObject:[propertyMapper.finalMappingEncodersByClass objectForKey:className] forKey:className];
+	}
+	
+	for(NSString *className in propertyMapper.finalMappingDecodersByClass.keyEnumerator) {
+		[self.finalMappingDecodersByClass setObject:[propertyMapper.finalMappingDecodersByClass objectForKey:className] forKey:className];
+	}
+	
+	[propertyMapper.finalMappingDecoderOptionByClass enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+		[self.finalMappingDecoderOptionByClass setObject:obj forKey:key];
+	}];
 }
 
 - (BOOL)setMappings:(NSDictionary *)mappings forClass:(Class)clazz
@@ -106,14 +149,38 @@
 	return !mappingError;
 }
 
+- (void)setFinalMappingEncoder:(CTXFinalMappingEncoderBlock)encoder forClass:(Class)clazz
+{
+	[self.finalMappingEncodersByClass setObject:encoder forKey:[clazz description]];
+}
+
+- (void)setFinalMappingDecoder:(CTXFinalMappingDecoderBlock)decoder forClass:(Class)clazz withOption:(CTXPropertyMapperFinalMappingDecoderOption)option
+{
+	[self.finalMappingDecodersByClass setObject:decoder forKey:[clazz description]];
+	[self.finalMappingDecoderOptionByClass setObject:@(option) forKey:[clazz description]];
+}
+
 - (BOOL)removeMappingsForClass:(Class)clazz
 {
+	BOOL success = NO;
+	
 	if (self.mappingsByClass[[clazz description]]) {
 		[self.mappingsByClass removeObjectForKey:[clazz description]];
-		return YES;
+		success = YES;
 	}
 	
-	return NO;
+	if([self.finalMappingEncodersByClass objectForKey:[clazz description]]) {
+		[self.finalMappingEncodersByClass removeObjectForKey:[clazz description]];
+		success = YES;
+	}
+	
+	if([self.finalMappingDecodersByClass objectForKey:[clazz description]]) {
+		[self.finalMappingDecodersByClass removeObjectForKey:[clazz description]];
+		[self.finalMappingDecoderOptionByClass removeObjectForKey:[clazz description]];
+		success = YES;
+	}
+	
+	return success;
 }
 
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary
@@ -155,6 +222,12 @@
 
 - (NSDictionary *)exportObject:(id)object withOptions:(enum CTXPropertyMapperExportOption)options
 {
+	if(object == [NSNull null]) {
+		return object;
+	} else if(object == nil) {
+		return nil;
+	}
+	
     NSDictionary *mappings = self.mappingsByClass[[object class].description];
     NSMutableDictionary *exportedObject = [NSMutableDictionary dictionary];
     
@@ -167,62 +240,70 @@
                     id value = [self _getSafeValueForKey:descriptor.propertyName atObject:object];
                     if (!value && options == CTXPropertyMapperExportOptionIncludeNullValue) {
                         value = [NSNull  null];
-                    }
-                    
-                    switch (descriptor.type) {
-                        case CTXPropertyDescriptorTypeDirect:
-                        {
-                            [currentDictionary setValue:value forKey:part];
-                        } break;
-                        case CTXPropertyDescriptorTypeClass:
-                        {
-                            if ([value isKindOfClass:NSSet.class]) {
-                                NSMutableArray *items = [NSMutableArray array];
-                                [(NSSet *)value enumerateObjectsUsingBlock:^(id obj, BOOL *s) {
-                                    [items addObject:[self exportObject:obj]];
-                                }];
-                                [currentDictionary setValue:items forKey:part];
-                            }else if ([value isKindOfClass:NSArray.class] || [value isKindOfClass:NSOrderedSet.class]) {
-                                NSMutableArray *items = [NSMutableArray array];
-                                [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
-                                    [items addObject:[self exportObject:obj]];
-                                }];
-                                [currentDictionary setValue:items forKey:part];
-                            } else {
-                                [currentDictionary setValue:[self exportObject:value] forKey:part];
-                            }
-                        } break;
-                        case CTXPropertyDescriptorTypeSymmetricalBlock:
-                        {
-                            [currentDictionary setValue:descriptor.encodingBlock(value, key) forKey:part];
-                        } break;
-                        case CTXPropertyDescriptorTypeAsymmetricalBlock:
-                        {
-                            [currentDictionary setValue:descriptor.encodingGenerationBlock(object) forKey:part];
-                        } break;
-                    }
-                } else {
-                    if (![currentDictionary valueForKey:part]) {
-                        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-                        [currentDictionary setValue:dict forKey:part];
-                        currentDictionary = dict;
-                    }
+					}
+					
+					switch (descriptor.type) {
+						case CTXPropertyDescriptorTypeDirect:
+						{
+							[currentDictionary ctx_setSafeValue:value forKey:part];
+						} break;
+						case CTXPropertyDescriptorTypeClass:
+						{
+							
+							if ([value isKindOfClass:NSSet.class]) {
+								NSMutableArray *items = [NSMutableArray array];
+								[(NSSet *)value enumerateObjectsUsingBlock:^(id obj, BOOL *s) {
+									[items addObject:[self exportObject:obj]];
+								}];
+								[currentDictionary ctx_setSafeValue:items forKey:part];
+							}else if ([value isKindOfClass:NSArray.class] || [value isKindOfClass:NSOrderedSet.class]) {
+								NSMutableArray *items = [NSMutableArray array];
+								[value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
+									[items addObject:[self exportObject:obj]];
+								}];
+								[currentDictionary ctx_setSafeValue:items forKey:part];
+							} else {
+								[currentDictionary ctx_setSafeValue:[self exportObject:value withOptions:options] forKey:part];
+							}
+						} break;
+						case CTXPropertyDescriptorTypeSymmetricalBlock:
+						{
+							[currentDictionary ctx_setSafeValue:descriptor.encodingBlock(value, key) forKey:part];
+						} break;
+						case CTXPropertyDescriptorTypeAsymmetricalBlock:
+						{
+							[currentDictionary ctx_setSafeValue:descriptor.encodingGenerationBlock(object) forKey:part];
+						} break;
+					}
+				} else {
+					if (![currentDictionary valueForKey:part]) {
+						NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+						[currentDictionary setValue:dict forKey:part];
+						currentDictionary = dict;
+					}
                 }
             }];
         }
     }];
-    
+	
+	CTXFinalMappingEncoderBlock encoder = [self.finalMappingEncodersByClass objectForKey:[object class].description];
+	if(encoder) {
+		NSMutableDictionary *mutableExportedObject = [exportedObject ctx_mutableDeepCopy];
+		encoder(mutableExportedObject, object);
+		[exportedObject addEntriesFromDictionary:[mutableExportedObject ctx_deepCopy]];
+	}
+	
     return exportedObject;
 }
 
 + (NSDictionary *)generateMappingsFromClass:(Class)clazz
 {
     NSMutableDictionary *mappings = [NSMutableDictionary dictionary];
-    
+	
     NSArray *allowedTypes = @[@"NSNumber", @"NSString", @"c", @"d", @"i", @"f", @"l", @"s", @"I"];
-    
+	
     NSDictionary *properties = [NSObject propertiesDictionaryFromClass:clazz];
-    
+	
     for (NSString *property in [properties allKeys]) {
         NSString *type = properties[property];
         
@@ -342,8 +423,36 @@
             }
         }
     }];
-    
-    return instance;
+	
+	
+	CTXFinalMappingDecoderBlock finalDecoder = [self.finalMappingDecodersByClass objectForKey:[clazz description]];
+	if(finalDecoder) {
+		CTXPropertyMapperFinalMappingDecoderOption finalDecoderOption = [[self.finalMappingDecoderOptionByClass objectForKey:[clazz description]] unsignedIntegerValue];
+		
+		if(finalDecoderOption == CTXPropertyMapperFinalMappingDecoderOptionIncludeAllKeys) {
+			finalDecoder(dictionary, instance);
+		} else if(finalDecoderOption == CTXPropertyMapperFinalMappingDecoderOptionExcludeAlreadyMappedKeys) {
+
+			
+			NSMutableDictionary *filteredDictionary = [dictionary ctx_mutableDeepCopy];
+			
+			for(NSString *key in mappings.allKeys) {
+				
+				[filteredDictionary removeObjectForKey:key];
+				
+				NSRange keyPathSeparatorRange = [key rangeOfString:@"." options:NSBackwardsSearch];
+				if(keyPathSeparatorRange.location != NSNotFound) {
+					NSString *basePath = [key substringWithRange:NSMakeRange(0, keyPathSeparatorRange.location)];
+					NSString *lastPathComponent = [key substringWithRange:NSMakeRange(keyPathSeparatorRange.location + keyPathSeparatorRange.length, key.length - (keyPathSeparatorRange.location + keyPathSeparatorRange.length))];
+					[[filteredDictionary valueForKeyPath:basePath] removeObjectForKey:lastPathComponent];
+				}
+			}
+
+			finalDecoder([filteredDictionary ctx_deepCopy], instance);
+		}
+	}
+	
+	return instance;
 }
 
 #pragma mark - Validations
@@ -591,6 +700,117 @@ NSString * getPropertyType(objc_property_t property) {
 	}
 	
 	return nil;
+}
+
+@end
+
+@implementation NSDictionary (CTXMutableDeepCopy)
+
+- (NSMutableDictionary *)ctx_deepCopy
+{
+	NSMutableDictionary *returnDict = [[NSMutableDictionary alloc] initWithCapacity:self.count];
+	
+	NSArray *keys = [self allKeys];
+	
+	for(id key in keys) {
+		id oneValue = [self objectForKey:key];
+		id oneCopy = nil;
+		
+		if([oneValue conformsToProtocol:@protocol(NSCopying)]){
+			oneCopy = [oneValue copy];
+		} else {
+			oneCopy = oneValue;
+		}
+		
+		[returnDict setValue:oneCopy forKey:key];
+	}
+	
+	return returnDict;
+}
+
+- (NSMutableDictionary *)ctx_mutableDeepCopy
+{
+	NSMutableDictionary *returnDict = [[NSMutableDictionary alloc] initWithCapacity:self.count];
+	
+	NSArray *keys = [self allKeys];
+	
+	for(id key in keys) {
+		id oneValue = [self objectForKey:key];
+		id oneCopy = nil;
+		
+		if([oneValue respondsToSelector:@selector(ctx_mutableDeepCopy)]) {
+			oneCopy = [oneValue ctx_mutableDeepCopy];
+		} else if([oneValue conformsToProtocol:@protocol(NSMutableCopying)]) {
+			oneCopy = [oneValue mutableCopy];
+		} else if([oneValue conformsToProtocol:@protocol(NSCopying)]){
+			oneCopy = [oneValue copy];
+		} else {
+			oneCopy = oneValue;
+		}
+		
+		[returnDict setValue:oneCopy forKey:key];
+	}
+	
+	return returnDict;
+}
+
+@end
+
+@implementation NSMutableDictionary (CTXSetSafeValueForKey)
+
+- (void)ctx_setSafeValue:(id)value forKey:(NSString *)key
+{
+	if(value == nil) {
+		return;
+	}
+	
+	[self setValue:value forKey:key];
+}
+
+@end
+
+@implementation NSArray (CTXMutableDeepCopy)
+
+- (NSMutableArray *)ctx_deepCopy
+{
+	NSMutableArray *returnArray = [[NSMutableArray alloc] initWithCapacity:self.count];
+	
+	for(id oneValue in self) {
+		id oneCopy = nil;
+		
+		if([oneValue conformsToProtocol:@protocol(NSCopying)]){
+			oneCopy = [oneValue copy];
+		} else {
+			oneCopy = oneValue;
+		}
+		
+		[returnArray addObject:oneCopy];
+	}
+	
+	return returnArray;
+}
+
+- (NSMutableArray *)ctx_mutableDeepCopy
+{
+	NSMutableArray *returnArray = [[NSMutableArray alloc] initWithCapacity:self.count];
+	
+	for(id oneValue in self) {
+		id oneCopy = nil;
+		
+		if([oneValue respondsToSelector:@selector(ctx_mutableDeepCopy)]) {
+			oneCopy = [oneValue ctx_mutableDeepCopy];
+		} else if([oneValue conformsToProtocol:@protocol(NSMutableCopying)]) {
+			oneCopy = [oneValue mutableCopy];
+		} else if([oneValue conformsToProtocol:@protocol(NSCopying)]){
+			oneCopy = [oneValue copy];
+		} else {
+			oneCopy = oneValue;
+		}
+		
+		[returnArray addObject:oneCopy];
+	}
+	
+	return returnArray;
 }
 
 @end

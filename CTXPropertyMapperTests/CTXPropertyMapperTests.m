@@ -320,7 +320,7 @@
 	BaseClass *base = [[BaseClass alloc] init];
 	NSDictionary *dictionary = [CTXPropertyMapper generateMappingsFromClass:[base class]];
 	
-	XCTAssert(dictionary.count == 5);
+	XCTAssert(dictionary.count == 6);
 	XCTAssert([dictionary valueForKey:@"name"]);
 	XCTAssert([dictionary valueForKey:@"number"]);
 	XCTAssert([dictionary valueForKey:@"page"]);
@@ -591,5 +591,53 @@
 	XCTAssert([dict[@"export"] isEqualToString:@"exported property"]);
 }
 
+- (void)testFinalMappings
+{
+	NSDictionary *source = @{@"id" : @"source id",
+							 @"metadata" : @{@"pagination":@{@"page":@(2)}},
+							 @"name" : [NSNull null],
+							 @"title" : @"some title",
+							 @"item" : [NSNull null],
+							 };
+
+	CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+	
+	[mapper addMappings:@{@"name":CTXProperty(name), @"title":CTXProperty(title)}
+			   forClass:[ItemClass class]];
+	
+	[mapper addMappings:@{@"id":CTXProperty(uuid),
+						  @"name":CTXProperty(name),
+						  @"metadata.pagination.page":CTXProperty(page),
+						  @"item":CTXClass(itemClass, [ItemClass class])}
+			   forClass:[BaseClass class]];
+	
+	[mapper setFinalMappingDecoder:^(NSDictionary *input, id object) {
+		
+		NSDictionary *expected = @{@"metadata" : @{@"pagination":@{}},
+								   @"title" : @"some title"};
+		XCTAssert([input isEqualToDictionary:expected]);
+		
+		[object setValue:input[@"title"] forKeyPath:@"title"];
+		
+		XCTAssert([[object title] isEqualToString:@"some title"]);
+		
+	} forClass:[BaseClass class] withOption:CTXPropertyMapperFinalMappingDecoderOptionExcludeAlreadyMappedKeys];
+	
+	BaseClass *instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source];
+	
+	XCTAssert(instance);
+	XCTAssert(instance.itemClass == nil);
+	
+	[mapper setFinalMappingEncoder:^(NSMutableDictionary *output, id object) {
+		
+		output[@"title"] = [object title];
+		
+	} forClass:[BaseClass class]];
+	
+	NSDictionary *exportedObject = [mapper exportObject:instance withOptions:CTXPropertyMapperExportOptionIncludeNullValue];
+	
+	XCTAssert(exportedObject);
+	XCTAssert([exportedObject isEqualToDictionary:source]);
+}
 
 @end

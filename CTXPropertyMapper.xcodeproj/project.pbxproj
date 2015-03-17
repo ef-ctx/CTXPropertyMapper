@@ -95,14 +95,14 @@
 			isa = PBXGroup;
 			children = (
 				AC8E91B01A828D5F0065C8A9 /* CTXPropertyMapper.h */,
+				AC8E91CB1A828DD70065C8A9 /* CTXPropertyMapper.m */,
+				AC8E91CE1A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h */,
 				AC8E91C71A828DD70065C8A9 /* CTXPropertyDescriptor.h */,
 				AC8E91C81A828DD70065C8A9 /* CTXPropertyDescriptor.m */,
 				AC8E91C91A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.h */,
 				AC8E91CA1A828DD70065C8A9 /* CTXPropertyDescriptor+Validators.m */,
-				AC8E91CB1A828DD70065C8A9 /* CTXPropertyMapper.m */,
 				AC8E91CC1A828DD70065C8A9 /* CTXPropertyMapperErrors.h */,
 				AC8E91CD1A828DD70065C8A9 /* CTXPropertyMapperErrors.m */,
-				AC8E91CE1A828DD70065C8A9 /* CTXPropertyMapperModelFactoryProtocol.h */,
 				AC8E91AE1A828D5F0065C8A9 /* Supporting Files */,
 			);
 			path = CTXPropertyMapper;
