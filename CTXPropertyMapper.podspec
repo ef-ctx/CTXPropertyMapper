@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   
   spec.name     = 'CTXPropertyMapper'
-  spec.version  = '1.1.1'
+  spec.version  = '1.2.0'
   spec.summary  = 'Simple and highly extensible two ways property mapper'
   spec.homepage = "https://github.com/ef-ctx/CTXPropertyMapper"
   

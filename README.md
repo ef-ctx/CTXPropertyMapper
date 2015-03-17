@@ -147,6 +147,23 @@ Now just create your instance of CTXPropertyMapper initializing with your custom
 CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] initWithModelFactory:[[CoreDataModelFactory alloc] init]];
 ````
 
+## Final Encoders and Decoders
+
+CTXPropertyMapper is very powerful and flexible, but cannot solve every single problem. Sometimes refinements on the final version of the encoded or decoded objects are necessary. To give developers more control we introduced a final step hook the that gives access to the full mapper state and is run right before the object is returned by the mapper.
+
+````objc
+[mapper setFinalMappingDecoder:^(NSDictionary *input, User *object){
+    NSLog(@"[Warning] User non mapped keys %@", input);
+} forClass:[User class] withOption:CTXPropertyMapperFinalMappingDecoderOptionExcludeAlreadyMappedKeys];
+````
+
+````objc
+[mapper setFinalMappingEncoder:^(NSMutableDictionary *output, User *object){
+    NSString *fullName = [NSString stringWithFormat:@"%@ %@", object.firstName, object.lastName];
+    [output setValue:fullName forKey:@"fullName"];
+} forClass:[User class]];
+````
+
 ## Automatic Mappings
 
 Usually the client model has the same structure as the server. To avoid repetitive code, CTXPropertyMapper supports creating models automatically.
@@ -174,6 +191,8 @@ Currently supported properties:
 ### Limitations
 
 Mapping generation doesn't consider inherited properties, created through protocols or dynamically created through the runtime, so use it wisely.
+
+To support `keyPath` mappings, the CTXPropertyMapper considers all key names containing dots (.) as keyPaths, and does not support keys that originally contain dots.
 
 ## Helpers
 
