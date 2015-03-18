@@ -7,6 +7,11 @@ Pod::Spec.new do |spec|
   
   spec.license      = { :type => 'MIT', :file => 'LICENSE' }
 
+  spec.authors      = {
+    "Mário Araújo" => "mario.araujo@ef.com",
+    "Stefan Ceriu" => "stefan.ceriu@ef.com"
+  }
+
   spec.platform     = :ios
   spec.ios.deployment_target = '6.0'
   spec.requires_arc = true
