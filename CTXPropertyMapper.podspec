@@ -1,15 +1,11 @@
 Pod::Spec.new do |spec|
   
   spec.name     = 'CTXPropertyMapper'
-  spec.version  = '1.2.0'
+  spec.version  = '1.2.1'
   spec.summary  = 'Simple and highly extensible two ways property mapper'
   spec.homepage = "https://github.com/ef-ctx/CTXPropertyMapper"
   
   spec.license      = { :type => 'MIT', :file => 'LICENSE' }
-
-  spec.authors      = {
-    "Mário Araújo" => "mario.araujo@ef.com"
-  }
 
   spec.platform     = :ios
   spec.ios.deployment_target = '6.0'
