@@ -29,7 +29,7 @@
 
 @interface NSMutableDictionary (CTXSetSafeValueForKey)
 
-- (void)ctx_setSafeValue:(id)value forKey:(NSString *)key;
+- (void)ctx_setSafeValue:(id)value forKeyPath:(NSString *)keyPath;
 
 @end
 
@@ -243,51 +243,52 @@
             NSArray *parts = [key componentsSeparatedByString:@"."];
             __block NSMutableDictionary *currentDictionary = exportedObject;
             [parts enumerateObjectsUsingBlock:^(NSString *part, NSUInteger index, BOOL *stp) {
+                
+                NSString *keyPath = [[parts subarrayWithRange:NSMakeRange(0, index + 1)] componentsJoinedByString:@"."];
+                
                 if (index == parts.count - 1) {
                     id value = [self _getSafeValueForKey:descriptor.propertyName atObject:object];
                     if (!value && options == CTXPropertyMapperExportOptionIncludeNullValue) {
                         value = [NSNull  null];
-					}
-					
-					switch (descriptor.type) {
-						case CTXPropertyDescriptorTypeDirect:
-						{
-							[currentDictionary ctx_setSafeValue:value forKey:part];
-						} break;
-						case CTXPropertyDescriptorTypeClass:
-						{
-							
-							if ([value isKindOfClass:NSSet.class]) {
-								NSMutableArray *items = [NSMutableArray array];
-								[(NSSet *)value enumerateObjectsUsingBlock:^(id obj, BOOL *s) {
-									[items addObject:[self exportObject:obj]];
-								}];
-								[currentDictionary ctx_setSafeValue:items forKey:part];
-							}else if ([value isKindOfClass:NSArray.class] || [value isKindOfClass:NSOrderedSet.class]) {
-								NSMutableArray *items = [NSMutableArray array];
-								[value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
-									[items addObject:[self exportObject:obj]];
-								}];
-								[currentDictionary ctx_setSafeValue:items forKey:part];
-							} else {
-								[currentDictionary ctx_setSafeValue:[self exportObject:value withOptions:options] forKey:part];
-							}
-						} break;
-						case CTXPropertyDescriptorTypeSymmetricalBlock:
-						{
-							[currentDictionary ctx_setSafeValue:descriptor.encodingBlock(value, key) forKey:part];
-						} break;
-						case CTXPropertyDescriptorTypeAsymmetricalBlock:
-						{
-							[currentDictionary ctx_setSafeValue:descriptor.encodingGenerationBlock(object) forKey:part];
-						} break;
-					}
-				} else {
-					if (![currentDictionary valueForKey:part]) {
-						NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-						[currentDictionary setValue:dict forKey:part];
-						currentDictionary = dict;
-					}
+                    }
+                    
+                    switch (descriptor.type) {
+                        case CTXPropertyDescriptorTypeDirect:
+                        {
+                            [currentDictionary ctx_setSafeValue:value forKeyPath:keyPath];
+                        } break;
+                        case CTXPropertyDescriptorTypeClass:
+                        {
+                            
+                            if ([value isKindOfClass:NSSet.class]) {
+                                NSMutableArray *items = [NSMutableArray array];
+                                [(NSSet *)value enumerateObjectsUsingBlock:^(id obj, BOOL *s) {
+                                    [items addObject:[self exportObject:obj]];
+                                }];
+                                [currentDictionary ctx_setSafeValue:items forKeyPath:keyPath];
+                            }else if ([value isKindOfClass:NSArray.class] || [value isKindOfClass:NSOrderedSet.class]) {
+                                NSMutableArray *items = [NSMutableArray array];
+                                [value enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *s) {
+                                    [items addObject:[self exportObject:obj]];
+                                }];
+                                [currentDictionary ctx_setSafeValue:items forKeyPath:keyPath];
+                            } else {
+                                [currentDictionary ctx_setSafeValue:[self exportObject:value withOptions:options] forKeyPath:keyPath];
+                            }
+                        } break;
+                        case CTXPropertyDescriptorTypeSymmetricalBlock:
+                        {
+                            [currentDictionary ctx_setSafeValue:descriptor.encodingBlock(value, key) forKeyPath:keyPath];
+                        } break;
+                        case CTXPropertyDescriptorTypeAsymmetricalBlock:
+                        {
+                            [currentDictionary ctx_setSafeValue:descriptor.encodingGenerationBlock(object) forKeyPath:keyPath];
+                        } break;
+                    }
+                } else {
+                    if (![currentDictionary valueForKeyPath:keyPath]) {
+                        [currentDictionary setValue:[NSMutableDictionary dictionary] forKeyPath:keyPath];
+                    }
                 }
             }];
         }
@@ -769,13 +770,13 @@ NSString * getPropertyType(objc_property_t property) {
 
 @implementation NSMutableDictionary (CTXSetSafeValueForKey)
 
-- (void)ctx_setSafeValue:(id)value forKey:(NSString *)key
+- (void)ctx_setSafeValue:(id)value forKeyPath:(NSString *)keyPath
 {
-	if(value == nil) {
-		return;
-	}
-	
-	[self setValue:value forKey:key];
+    if(value == nil) {
+        return;
+    }
+    
+    [self setValue:value forKeyPath:keyPath];
 }
 
 @end

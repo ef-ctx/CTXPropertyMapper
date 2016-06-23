@@ -23,6 +23,7 @@
 @property (nonatomic, strong, readonly) NSString *name;
 @property (nonatomic, strong, readonly) NSString *title;
 @property (nonatomic, assign, readonly) int page;
+@property (nonatomic, assign, readonly) int offset;
 @property (nonatomic, strong, readonly) NSArray *children;
 @property (nonatomic, strong, readonly) NSSet *set;
 @property (nonatomic, strong, readonly) void ((^block)(void));
@@ -320,10 +321,11 @@
 	BaseClass *base = [[BaseClass alloc] init];
 	NSDictionary *dictionary = [CTXPropertyMapper generateMappingsFromClass:[base class]];
 	
-	XCTAssert(dictionary.count == 6);
+	XCTAssert(dictionary.count == 7);
 	XCTAssert([dictionary valueForKey:@"name"]);
 	XCTAssert([dictionary valueForKey:@"number"]);
 	XCTAssert([dictionary valueForKey:@"page"]);
+    XCTAssert([dictionary valueForKey:@"offset"]);
 	XCTAssert([dictionary valueForKey:@"title"]);
 	XCTAssert([dictionary valueForKey:@"uuid"]);
 }
@@ -638,6 +640,39 @@
 	
 	XCTAssert(exportedObject);
 	XCTAssert([exportedObject isEqualToDictionary:source]);
+}
+
+- (void)testKeyPathEncoding
+{
+    NSDictionary *source = @{@"id" : @"source id",
+                             @"metadata" : @{@"pagination":@{@"page":@(2), @"offset":@(10)}, @"version":@"1.0.0"},
+                             @"name" : [NSNull null],
+                             @"title" : @"some title",
+                             @"item" : [NSNull null],
+                             };
+    
+    CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+    
+    [mapper addMappings:@{@"name":CTXProperty(name), @"title":CTXProperty(title)}
+               forClass:[ItemClass class]];
+    
+    [mapper addMappings:@{@"id":CTXProperty(uuid),
+                          @"name":CTXProperty(name),
+                          @"metadata.pagination.page":CTXProperty(page),
+                          @"metadata.pagination.offset":CTXProperty(offset),
+                          @"item":CTXClass(itemClass, [ItemClass class])}
+               forClass:[BaseClass class]];
+    
+    NSArray *errors = nil;
+    BaseClass *instance = [mapper createObjectWithClass:[BaseClass class] fromDictionary:source errors:&errors];
+    
+    NSDictionary *exportedObject = [mapper exportObject:instance];
+    
+    NSDictionary *expectedDictionary = @{@"id" : @"source id",
+                                         @"metadata" : @{@"pagination":@{@"page":@(2), @"offset":@(10)}}
+                                         };
+    
+    XCTAssert([exportedObject isEqualToDictionary:expectedDictionary]);
 }
 
 @end
