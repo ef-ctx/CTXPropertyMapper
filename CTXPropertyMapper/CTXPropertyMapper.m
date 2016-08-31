@@ -667,8 +667,6 @@ NSString * getPropertyType(objc_property_t property) {
 		__autoreleasing Class theClass = Nil;
 		[invocation getReturnValue:&theClass];
 		return theClass;
-	} else if (strcmp(returnType, @encode(char)) == 0) {
-		WRAP_AND_RETURN(char);
 	} else if (strcmp(returnType, @encode(int)) == 0) {
 		WRAP_AND_RETURN(int);
 	} else if (strcmp(returnType, @encode(short)) == 0) {
@@ -697,6 +695,8 @@ NSString * getPropertyType(objc_property_t property) {
 		WRAP_AND_RETURN(BOOL);
 	} else if (strcmp(returnType, @encode(char *)) == 0) {
 		WRAP_AND_RETURN(const char *);
+    } else if (strcmp(returnType, @encode(char)) == 0) {
+        WRAP_AND_RETURN(char);
 	} else if (strcmp(returnType, @encode(void (^)(void))) == 0) {
 		__unsafe_unretained id block = nil;
 		[invocation getReturnValue:&block];

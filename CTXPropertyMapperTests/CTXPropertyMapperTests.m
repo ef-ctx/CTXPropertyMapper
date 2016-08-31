@@ -29,6 +29,7 @@
 @property (nonatomic, strong, readonly) void ((^block)(void));
 @property (nonatomic, strong, readonly) id subItem;
 @property (nonatomic, retain, readonly) NSNumber *number;
+@property (nonatomic, assign, readonly) BOOL boolean;
 @property (nonatomic, retain, readonly) ItemClass *itemClass;
 @property (nonatomic, retain, readonly) NSOrderedSet *orderedSet;
 @property (nonatomic, assign, readonly) BOOL usingCustomInit;
@@ -85,6 +86,7 @@
 							 @"metadata":@{@"pagination":@{@"page":@(2)}},
 							 @"name":[NSNull null],
 							 @"title":@"source title",
+                             @"boolean":@(YES),
 							 @"items":@[
 									 @{
 										 @"name":    @"Item Name 0",
@@ -112,6 +114,7 @@
 						  @"id":CTXProperty(uuid),
 						  @"name":CTXProperty(name),
 						  @"title":CTXProperty(title),
+                          @"boolean":CTXProperty(boolean),
 						  @"metadata.pagination.page":CTXProperty(page),
 						  @"items":CTXClass(children, [ItemClass class])
 						  }
@@ -124,6 +127,7 @@
 	XCTAssert(instance.name == nil);
 	XCTAssert([instance.title isEqualToString:@"source title"]);
 	XCTAssert(instance.page == 2);
+    XCTAssert(instance.boolean == YES);
 	
 	ItemClass *item0 = instance.children[0];
 	XCTAssert([item0.name isEqualToString:@"Item Name 0"]);
@@ -141,6 +145,7 @@
 	NSDictionary *dict = [mapper exportObject:instance];
 	XCTAssert(dict);
 	XCTAssert([dict[@"id"] isEqualToString:@"source id"]);
+    XCTAssert([dict[@"boolean"] isEqualToNumber:@(YES)]);
 	XCTAssert([[dict valueForKeyPath:@"metadata.pagination.page"] isEqualToNumber:@(2)]);
 	XCTAssert(!dict[@"name"]);
 	XCTAssert([dict[@"title"] isEqualToString:@"source title"]);
@@ -321,13 +326,14 @@
 	BaseClass *base = [[BaseClass alloc] init];
 	NSDictionary *dictionary = [CTXPropertyMapper generateMappingsFromClass:[base class]];
 	
-	XCTAssert(dictionary.count == 7);
+	XCTAssert(dictionary.count == 8);
 	XCTAssert([dictionary valueForKey:@"name"]);
 	XCTAssert([dictionary valueForKey:@"number"]);
 	XCTAssert([dictionary valueForKey:@"page"]);
     XCTAssert([dictionary valueForKey:@"offset"]);
 	XCTAssert([dictionary valueForKey:@"title"]);
 	XCTAssert([dictionary valueForKey:@"uuid"]);
+    XCTAssert([dictionary valueForKey:@"boolean"]);
 }
 
 - (void)testSetProperty
@@ -673,6 +679,25 @@
                                          };
     
     XCTAssert([exportedObject isEqualToDictionary:expectedDictionary]);
+}
+
+- (void)testingBooleanJsonEncoding
+{
+    BaseClass *instance = [[BaseClass alloc] initWithName:@"name"];
+    
+    CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+    
+    [mapper addMappings:@{@"name":CTXProperty(name),
+                          @"usingCustomInit":CTXProperty(usingCustomInit)}
+               forClass:[BaseClass class]];
+    
+    NSDictionary *exportedObject = [mapper exportObject:instance withOptions:CTXPropertyMapperExportOptionExcludeNullValue];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:exportedObject options:0 error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+    XCTAssert(exportedObject);
+    XCTAssert(jsonString);
+    XCTAssert([jsonString isEqualToString:@"{\"usingCustomInit\":true,\"name\":\"name\"}"]);
 }
 
 @end
