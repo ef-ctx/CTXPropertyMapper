@@ -681,7 +681,7 @@
     XCTAssert([exportedObject isEqualToDictionary:expectedDictionary]);
 }
 
-- (void)testingBooleanJsonEncoding
+- (void)testBooleanJsonEncoding
 {
     BaseClass *instance = [[BaseClass alloc] initWithName:@"name"];
     
@@ -698,6 +698,54 @@
     XCTAssert(exportedObject);
     XCTAssert(jsonString);
     XCTAssert([jsonString isEqualToString:@"{\"usingCustomInit\":true,\"name\":\"name\"}"]);
+}
+
+- (void)testIncludeNullExportOption
+{
+    BaseClass *instance = [[BaseClass alloc] initWithName:@"name"];
+    
+    CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+    
+    [mapper addMappings:@{@"name":CTXProperty(name),
+                          @"usingCustomInit":CTXProperty(usingCustomInit),
+                          @"itemClass":CTXClass(itemClass, [ItemClass class]),
+                          @"title":CTXBlock(title,
+                                            ^id(id input, NSString *property){return nil;},
+                                            ^id(id input, NSString *property){return nil;})
+                          }
+               forClass:[BaseClass class]];
+
+    NSDictionary *dictionary = [mapper exportObject:instance withOptions:CTXPropertyMapperExportOptionIncludeNullValue];
+    
+    XCTAssert(dictionary);
+    XCTAssert([dictionary[@"name"] isEqualToString:@"name"]);
+    XCTAssert([dictionary[@"usingCustomInit"] isEqualToNumber:@(1)]);
+    XCTAssert([dictionary[@"title"] isKindOfClass:[NSNull class]]);
+    XCTAssert([dictionary[@"itemClass"] isKindOfClass:[NSNull class]]);
+}
+
+- (void)testExcludeNullExportOption
+{
+    BaseClass *instance = [[BaseClass alloc] initWithName:@"name"];
+    
+    CTXPropertyMapper *mapper = [[CTXPropertyMapper alloc] init];
+    
+    [mapper addMappings:@{@"name":CTXProperty(name),
+                          @"usingCustomInit":CTXProperty(usingCustomInit),
+                          @"itemClass":CTXClass(itemClass, [ItemClass class]),
+                          @"title":CTXBlock(title,
+                                            ^id(id input, NSString *property){return nil;},
+                                            ^id(id input, NSString *property){return nil;})
+                          }
+               forClass:[BaseClass class]];
+    
+    NSDictionary *dictionary = [mapper exportObject:instance withOptions:CTXPropertyMapperExportOptionExcludeNullValue];
+    
+    XCTAssert(dictionary);
+    XCTAssert([dictionary[@"name"] isEqualToString:@"name"]);
+    XCTAssert([dictionary[@"usingCustomInit"] isEqualToNumber:@(1)]);
+    XCTAssert(dictionary[@"title"] == nil);
+    XCTAssert(dictionary[@"itemClass"] == nil);
 }
 
 @end
