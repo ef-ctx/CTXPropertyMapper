@@ -110,10 +110,10 @@
 	}
 	
     if (!mappingError) {
-        if (!self.mappingsByClass[[clazz description]]) {
-            self.mappingsByClass[[clazz description]] = [NSMutableDictionary dictionary];
+        if (!self.mappingsByClass[NSStringFromClass(clazz)]) {
+            self.mappingsByClass[NSStringFromClass(clazz)] = [NSMutableDictionary dictionary];
         }
-        [self.mappingsByClass[[clazz description]] addEntriesFromDictionary:mappings];
+        [self.mappingsByClass[NSStringFromClass(clazz)] addEntriesFromDictionary:mappings];
     }
     
     return !mappingError;
@@ -150,7 +150,7 @@
 	}
 	
 	if (!mappingError) {
-		self.mappingsByClass[[clazz description]] = [mappings copy];
+		self.mappingsByClass[NSStringFromClass(clazz)] = [mappings copy];
 	}
 	
 	return !mappingError;
@@ -158,32 +158,32 @@
 
 - (void)setFinalMappingEncoder:(CTXFinalMappingEncoderBlock)encoder forClass:(Class)clazz
 {
-	[self.finalMappingEncodersByClass setObject:encoder forKey:[clazz description]];
+	[self.finalMappingEncodersByClass setObject:encoder forKey:NSStringFromClass(clazz)];
 }
 
 - (void)setFinalMappingDecoder:(CTXFinalMappingDecoderBlock)decoder forClass:(Class)clazz withOption:(CTXPropertyMapperFinalMappingDecoderOption)option
 {
-	[self.finalMappingDecodersByClass setObject:decoder forKey:[clazz description]];
-	[self.finalMappingDecoderOptionByClass setObject:@(option) forKey:[clazz description]];
+	[self.finalMappingDecodersByClass setObject:decoder forKey:NSStringFromClass(clazz)];
+	[self.finalMappingDecoderOptionByClass setObject:@(option) forKey:NSStringFromClass(clazz)];
 }
 
 - (BOOL)removeMappingsForClass:(Class)clazz
 {
 	BOOL success = NO;
 	
-	if (self.mappingsByClass[[clazz description]]) {
-		[self.mappingsByClass removeObjectForKey:[clazz description]];
+	if (self.mappingsByClass[NSStringFromClass(clazz)]) {
+		[self.mappingsByClass removeObjectForKey:NSStringFromClass(clazz)];
 		success = YES;
 	}
 	
-	if([self.finalMappingEncodersByClass objectForKey:[clazz description]]) {
-		[self.finalMappingEncodersByClass removeObjectForKey:[clazz description]];
+	if([self.finalMappingEncodersByClass objectForKey:NSStringFromClass(clazz)]) {
+		[self.finalMappingEncodersByClass removeObjectForKey:NSStringFromClass(clazz)];
 		success = YES;
 	}
 	
-	if([self.finalMappingDecodersByClass objectForKey:[clazz description]]) {
-		[self.finalMappingDecodersByClass removeObjectForKey:[clazz description]];
-		[self.finalMappingDecoderOptionByClass removeObjectForKey:[clazz description]];
+	if([self.finalMappingDecodersByClass objectForKey:NSStringFromClass(clazz)]) {
+		[self.finalMappingDecodersByClass removeObjectForKey:NSStringFromClass(clazz)];
+		[self.finalMappingDecoderOptionByClass removeObjectForKey:NSStringFromClass(clazz)];
 		success = YES;
 	}
 	
@@ -197,12 +197,11 @@
 
 - (id)createObjectWithClass:(Class)clazz fromDictionary:(NSDictionary *)dictionary errors:(NSArray *__autoreleasing*)errors
 {
-    NSDictionary *mappings = self.mappingsByClass[clazz.description];
+    NSDictionary *mappings = self.mappingsByClass[NSStringFromClass(clazz)];
     NSArray *validationErrors = nil;
     
     if (!mappings) {
-        NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeMapperDidNotFound),
-                                 [clazz description]];
+        NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeMapperDidNotFound), NSStringFromClass(clazz)];
         
         NSError *error = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
                                              code:CTXPropertyMapperErrorCodeMapperDidNotFound
@@ -235,7 +234,7 @@
 		return nil;
 	}
 	
-    NSDictionary *mappings = self.mappingsByClass[[object class].description];
+    NSDictionary *mappings = self.mappingsByClass[NSStringFromClass([object class])];
     NSMutableDictionary *exportedObject = [NSMutableDictionary dictionary];
     
     [mappings enumerateKeysAndObjectsUsingBlock:^(NSString *key, CTXPropertyDescriptor *descriptor, BOOL *stop) {
@@ -291,7 +290,7 @@
         }
     }];
 	
-	CTXFinalMappingEncoderBlock encoder = [self.finalMappingEncodersByClass objectForKey:[object class].description];
+	CTXFinalMappingEncoderBlock encoder = [self.finalMappingEncodersByClass objectForKey:NSStringFromClass([object class])];
 	if(encoder) {
 		NSMutableDictionary *mutableExportedObject = [exportedObject ctx_mutableDeepCopy];
 		encoder(mutableExportedObject, object);
@@ -313,7 +312,7 @@
         NSString *type = properties[property];
         
         if ([allowedTypes containsObject:type]) {
-            [mappings setValue:[[CTXPropertyDescriptor alloc] initWithPropertyName:property] forKey:property];
+            [mappings setValue:[[CTXPropertyDescriptor alloc] initWithSelector:NSSelectorFromString(property)] forKey:property];
         }
     }
     
@@ -324,7 +323,7 @@
 {
     NSMutableDictionary *mappings = [NSMutableDictionary dictionary];
     for (NSString *key in keys) {
-        [mappings setValue:[[CTXPropertyDescriptor alloc] initWithPropertyName:key] forKey:key];
+        [mappings setValue:[[CTXPropertyDescriptor alloc] initWithSelector:NSSelectorFromString(key)] forKey:key];
     }
     return mappings;
 }
@@ -333,7 +332,7 @@
 
 - (NSDictionary *)_propertiesForClass:(Class)clazz
 {
-    NSDictionary *properties = self.cachedPropertiesByClass[[clazz description]];
+    NSDictionary *properties = self.cachedPropertiesByClass[NSStringFromClass(clazz)];
     
     if (!properties) {
         
@@ -347,7 +346,7 @@
         
         properties = mutableDictionary;
         
-        self.cachedPropertiesByClass[[clazz description]] = properties;
+        self.cachedPropertiesByClass[NSStringFromClass(clazz)] = properties;
     }
     
     return properties;
@@ -375,11 +374,11 @@
     if ([value isKindOfClass:NSArray.class]) {
         NSDictionary *properties = [self _propertiesForClass:[object class]];
         //TODO: Actually doesn't support subclasses of the follow entities
-        if ([properties[key] isEqualToString:[NSArray description]] || [properties[key] isEqualToString:[NSMutableArray description]]) {
+        if ([properties[key] isEqualToString:NSStringFromClass([NSArray class])] || [properties[key] isEqualToString:NSStringFromClass([NSMutableArray class])]) {
             [object setValue:value forKey:key];
-        } else if ([properties[key] isEqualToString:[NSSet description]] || [properties[key] isEqualToString:[NSMutableSet description]]) {
+        } else if ([properties[key] isEqualToString:NSStringFromClass([NSSet class])] || [properties[key] isEqualToString:NSStringFromClass([NSMutableSet class])]) {
             [object setValue:[NSMutableSet setWithArray:value] forKey:key];
-        } else if ([properties[key] isEqualToString:[NSOrderedSet description]] || [properties[key] isEqualToString:[NSMutableOrderedSet description]]){
+        } else if ([properties[key] isEqualToString:NSStringFromClass([NSOrderedSet class])] || [properties[key] isEqualToString:NSStringFromClass([NSMutableOrderedSet class])]){
             [object setValue:[NSMutableOrderedSet orderedSetWithArray:value] forKey:key];
         }
         
@@ -395,7 +394,7 @@
 		return nil;
 	}
 	
-    NSDictionary *mappings = self.mappingsByClass[[clazz description]];
+    NSDictionary *mappings = self.mappingsByClass[NSStringFromClass(clazz)];
     
     id instance = [self.modelFactory instanceForClass:clazz withDictionary:dictionary];
     
@@ -434,9 +433,9 @@
     }];
 	
 	
-	CTXFinalMappingDecoderBlock finalDecoder = [self.finalMappingDecodersByClass objectForKey:[clazz description]];
+	CTXFinalMappingDecoderBlock finalDecoder = [self.finalMappingDecodersByClass objectForKey:NSStringFromClass(clazz)];
 	if(finalDecoder) {
-		CTXPropertyMapperFinalMappingDecoderOption finalDecoderOption = [[self.finalMappingDecoderOptionByClass objectForKey:[clazz description]] unsignedIntegerValue];
+		CTXPropertyMapperFinalMappingDecoderOption finalDecoderOption = [[self.finalMappingDecoderOptionByClass objectForKey:NSStringFromClass(clazz)] unsignedIntegerValue];
 		
 		if(finalDecoderOption == CTXPropertyMapperFinalMappingDecoderOptionIncludeAllKeys) {
 			finalDecoder(dictionary, instance);
@@ -484,7 +483,7 @@
 			*stop = YES;
 		} else if (descriptor.type != CTXPropertyDescriptorTypeAsymmetricalBlock && !properties[descriptor.propertyName]) {
 			NSString *author = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeUnknownProperty),
-								descriptor.propertyName, [clazz description]];
+								descriptor.propertyName, NSStringFromClass(clazz)];
 			mappingError = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
 											   code:CTXPropertyMapperErrorCodeUnknownProperty
 										   userInfo:@{NSLocalizedDescriptionKey:author}];
@@ -543,7 +542,7 @@
         switch (descriptor.type) {
             case CTXPropertyDescriptorTypeClass:
             {
-                NSDictionary *subMapping = self.mappingsByClass[[descriptor.propertyClass description]];
+                NSDictionary *subMapping = self.mappingsByClass[NSStringFromClass(descriptor.propertyClass)];
                 
                 if (subMapping) {
                     NSArray *validationErrors = [self _validateMapping:subMapping withValues:value];
@@ -551,7 +550,7 @@
                         [errors addObjectsFromArray:validationErrors];
                     }
                 } else {
-                    NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeMapperDidNotFound), [descriptor.propertyClass description]];
+                    NSString *description = [NSString stringWithFormat:CTXPropertyMapperErrorDescription(CTXPropertyMapperErrorCodeMapperDidNotFound), NSStringFromClass(descriptor.propertyClass)];
                     
                     NSError *error = [NSError errorWithDomain:kCTXPropertyMapperErrorDomain
                                                          code:CTXPropertyMapperErrorCodeMapperDidNotFound

@@ -28,30 +28,30 @@
     return nil;
 }
 
-- (instancetype)initWithPropertyName:(NSString *)propertyName
+- (instancetype)initWithSelector:(SEL)selector
 {
-    return [self initWithPropertyName:propertyName mode:CTXPropertyMapperCodificationModeEncodeAndDecode];
+    return [self initWithSelector:selector mode:CTXPropertyMapperCodificationModeEncodeAndDecode];
 }
 
-- (instancetype)initWithPropertyName:(NSString *)propertyName mode:(enum CTXPropertyMapperCodificationMode)mode
+- (instancetype)initWithSelector:(SEL)selector mode:(enum CTXPropertyMapperCodificationMode)mode
 {
     if (self = [super init]) {
-        _propertyName = propertyName;
+        _propertyName = NSStringFromSelector(selector);
         _type = CTXPropertyDescriptorTypeDirect;
         _mode = mode;
     }
     return self;
 }
 
-- (instancetype)initWithPropertyName:(NSString *)propertyName withClass:(Class)clazz
+- (instancetype)initWithSelector:(SEL)selector withClass:(Class)clazz
 {
-    return [self initWithPropertyName:propertyName withClass:clazz mode:CTXPropertyMapperCodificationModeEncodeAndDecode];
+    return [self initWithSelector:selector withClass:clazz mode:CTXPropertyMapperCodificationModeEncodeAndDecode];
 }
 
-- (instancetype)initWithPropertyName:(NSString *)propertyName withClass:(Class)clazz mode:(enum CTXPropertyMapperCodificationMode)mode
+- (instancetype)initWithSelector:(SEL)selector withClass:(Class)clazz mode:(enum CTXPropertyMapperCodificationMode)mode
 {
     if (self = [super init]) {
-        _propertyName = propertyName;
+        _propertyName = NSStringFromSelector(selector);
         _propertyClass = clazz;
         _type = CTXPropertyDescriptorTypeClass;
         _mode = mode;
@@ -59,10 +59,10 @@
     return self;
 }
 
-- (instancetype)initWithPropertyName:(NSString *)propertyName encondingBlock:(CTXValueTransformerBlock)encoder decodingBlock:(CTXValueTransformerBlock)decoder
+- (instancetype)initWithSelector:(SEL)selector encondingBlock:(CTXValueTransformerBlock)encoder decodingBlock:(CTXValueTransformerBlock)decoder
 {
     if (self = [super init]) {
-        _propertyName = propertyName;
+        _propertyName = NSStringFromSelector(selector);
         _type = CTXPropertyDescriptorTypeSymmetricalBlock;
         _encodingBlock = encoder;
         _decodingBlock = decoder;
